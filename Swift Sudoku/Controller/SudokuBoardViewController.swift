@@ -227,7 +227,7 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         
         if selectedIndex != nil {
             DispatchQueue.main.async {
-                cell.contentView.backgroundColor = .lightGray
+                cell.contentView.backgroundColor = .secondaryLabel
             }
         }
         return cell
@@ -237,9 +237,8 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         guard let cell = collectionView.cellForItem(at: indexPath) as? SudokuCollectionViewCell else {
             fatalError()
         }
-        collectionView.deselectItem(at: indexPath, animated: true)
         DispatchQueue.main.async {
-            cell.contentView.backgroundColor = .lightGray
+            cell.contentView.backgroundColor = .secondaryLabel
         }
         self.selectedIndex = indexPath
     }
