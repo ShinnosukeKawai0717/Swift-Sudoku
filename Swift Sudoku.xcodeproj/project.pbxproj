@@ -101,9 +101,9 @@
 		7DAB5DCF288ABB7F006FA9CD /* Swift Sudoku */ = {
 			isa = PBXGroup;
 			children = (
-				7DAB5E04288ABE52006FA9CD /* Controller */,
-				7DAB5E0B288ABF15006FA9CD /* View */,
 				7DAB5E07288ABE7D006FA9CD /* Model */,
+				7DAB5E0B288ABF15006FA9CD /* View */,
+				7DAB5E04288ABE52006FA9CD /* Controller */,
 				7DAB5DD9288ABB7F006FA9CD /* Assets.xcassets */,
 				7DAB5DDE288ABB7F006FA9CD /* Info.plist */,
 			);
