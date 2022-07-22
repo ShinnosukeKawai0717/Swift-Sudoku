@@ -194,6 +194,7 @@ class SudokuBoardViewController: UIViewController {
             }
             let result = uiAlert.textFields![0].text
             strongSelf.unsolvedBoard.name = result ?? "My problem"
+            strongSelf.unsolvedBoard.dateAdded = Date()
             strongSelf.databaseManager.save(newFavorite: strongSelf.unsolvedBoard)
             strongSelf.databaseManager.printRealmURL()
         }
