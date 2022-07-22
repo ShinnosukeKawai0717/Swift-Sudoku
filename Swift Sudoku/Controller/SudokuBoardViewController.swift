@@ -115,7 +115,7 @@ class SudokuBoardViewController: UIViewController {
             switch result {
             case .success(let unsolvedSudoku):
                 strongSelf.unsolvedBoard = unsolvedSudoku
-                ProgressHUD.showSuccess()
+                ProgressHUD.dismiss()
                 guard let copy = unsolvedSudoku.copy(with: nil) as? Sudoku else {
                     return
                 }
