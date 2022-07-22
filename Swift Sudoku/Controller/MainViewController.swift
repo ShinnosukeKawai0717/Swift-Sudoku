@@ -145,7 +145,24 @@ extension MainViewController: KeyboardViewControllerDelegate {
 
 extension MainViewController: SudokuBoardViewControllerDelegate {
     func timerShouldStart() {
-        timerView.startTimer()
+        var second = 0
+        var minutes = 0
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+            guard let strongSelf = self else {
+                return
+            }
+            if second == 60  {
+                second = 0
+                minutes += 1
+            }
+            let second_str = second < 10 ? "0\(second)" : "\(second)"
+            let minu_str = minutes < 10 ? "0\(minutes)" : "\(minutes)"
+            
+            DispatchQueue.main.async {
+                strongSelf.timerView.configure(text: "\(minu_str) : \(second_str)")
+            }
+            second += 1
+        }.fire()
     }
 }
 

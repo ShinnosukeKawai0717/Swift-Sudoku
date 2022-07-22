@@ -24,23 +24,9 @@ class TimerView: UIView {
         super.init(frame: frame)
         addSubview(timerLabel)
     }
-    
-    func startTimer() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-            guard let strongSelf = self else {
-                return
-            }
-            if strongSelf.second == 60  {
-                strongSelf.second = 0
-                strongSelf.minutes += 1
-            }
-            let second_str = strongSelf.second < 10 ? "0\(strongSelf.second)" : "\(strongSelf.second)"
-            let minu_str = strongSelf.minutes < 10 ? "0\(strongSelf.minutes)" : "\(strongSelf.minutes)"
-            
-            DispatchQueue.main.async {
-                strongSelf.timerLabel.text = "\(minu_str) : \(second_str)"
-            }
-            strongSelf.second += 1
+    func configure(text: String) {
+        DispatchQueue.main.async {
+            self.timerLabel.text = text
         }
     }
     override func layoutSubviews() {
