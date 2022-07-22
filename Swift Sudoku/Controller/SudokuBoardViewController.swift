@@ -71,8 +71,6 @@ class SudokuBoardViewController: UIViewController {
         sudokuGridCollectionView.delegate = self
         sudokuGridCollectionView.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
-        ProgressHUD.show()
-        
         let queue = DispatchGroup()
         queue.enter()
         DispatchQueue.global(qos: .userInitiated).async {
@@ -108,6 +106,7 @@ class SudokuBoardViewController: UIViewController {
     public func generateSudoku(with diff: String) {
         hintIndexPaths.removeAll()
         selectedIndex = nil
+        ProgressHUD.show()
         SudokuManager.shared.generate(diff: diff) { [weak self] result in
             guard let strongSelf = self else {
                 return
@@ -128,7 +127,7 @@ class SudokuBoardViewController: UIViewController {
                 }
             case .failure(let error):
                 print(error.localizedDescription)
-                ProgressHUD.showFailed("Something went wrong", interaction: false)
+                ProgressHUD.showFailed("Something went wrong", interaction: true)
             }
         }
     }
