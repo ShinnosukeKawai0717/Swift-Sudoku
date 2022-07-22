@@ -30,13 +30,12 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         keyBoardVC.delegate = self
+        sudokuVC.delegate = self
         diffPickerView.delegate = self
         diffPickerView.dataSource = self
         favoriteListVC.delegate = self
         AppUtility.lockOrientation(.portrait)
         view.backgroundColor = .systemBackground
-        
-        timerView.startTimer()
     }
     
     override func viewDidLayoutSubviews() {
@@ -141,6 +140,12 @@ extension MainViewController: KeyboardViewControllerDelegate {
         default:
             sudokuVC.modifyBoard(with: letter)
         }
+    }
+}
+
+extension MainViewController: SudokuBoardViewControllerDelegate {
+    func timerShouldStart() {
+        timerView.startTimer()
     }
 }
 

@@ -32,6 +32,7 @@ class FavoriteListViewController: UIViewController {
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(listTableView)
         listTableView.delegate = self
         listTableView.dataSource = self
     }
@@ -40,7 +41,6 @@ class FavoriteListViewController: UIViewController {
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        view.addSubview(listTableView)
         NSLayoutConstraint.activate([
             listTableView.topAnchor.constraint(equalTo: view.topAnchor),
             listTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

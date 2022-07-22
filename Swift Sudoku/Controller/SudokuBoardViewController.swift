@@ -9,12 +9,17 @@ import ProgressHUD
 import UIKit
 import RealmSwift
 
+protocol SudokuBoardViewControllerDelegate: AnyObject {
+    func timerShouldStart()
+}
+
 class SudokuBoardViewController: UIViewController {
     
     let toast = Toast(type: .info,
                       message: "The problem has been solved",
                       image: UIImage(systemName: "checkmark.circle.fill",
                                      withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .systemGreen)))
+    weak var delegate: SudokuBoardViewControllerDelegate?
     private let sudokuManager = SudokuManager()
     private let databaseManager = DatabaseManager()
     private var hintIndexPaths: [IndexPath] = []
@@ -111,7 +116,7 @@ class SudokuBoardViewController: UIViewController {
                 DispatchQueue.global(qos: .background).async {
                     if let solvedOne = strongSelf.sudokuManager.solve(sudoku: copy) {
                         strongSelf.solvedBoard = solvedOne
-                        
+                        strongSelf.delegate?.timerShouldStart()
                         DispatchQueue.main.async {
                             let totastView = ToastView(toast: strongSelf.toast, frame: CGRect(x: 0, y: 0, width: strongSelf.view.frame.size.width/1.2, height: 60))
                             totastView.show(on: strongSelf.sudokuGridCollectionView)
