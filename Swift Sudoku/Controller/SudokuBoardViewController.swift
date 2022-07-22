@@ -72,10 +72,18 @@ class SudokuBoardViewController: UIViewController {
         sudokuGridCollectionView.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
         ProgressHUD.show()
+        
+        let queue = DispatchGroup()
+        queue.enter()
         DispatchQueue.global().async {
             self.generateSudoku(with: "1")
+            queue.leave()
+        }
+        queue.notify(queue: .global(qos: .userInteractive)) {
+            self.delegate?.timerShouldStart()
         }
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         savedSudoku = databaseManager.retrive()
@@ -107,7 +115,6 @@ class SudokuBoardViewController: UIViewController {
             switch result {
             case .success(let unsolvedSudoku):
                 strongSelf.unsolvedBoard = unsolvedSudoku
-                strongSelf.delegate?.timerShouldStart()
                 ProgressHUD.showSuccess()
                 guard let copy = unsolvedSudoku.copy(with: nil) as? Sudoku else {
                     return
@@ -196,7 +203,7 @@ class SudokuBoardViewController: UIViewController {
             }
             strongSelf.delegate?.timerShouldRestart()
         }
-        let done = UIAlertAction(title: "Done", style: .default) { [weak self] action in
+        let done = UIAlertAction(title: "Add", style: .default) { [weak self] action in
             guard let strongSelf = self else {
                 return
             }

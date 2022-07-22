@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import ProgressHUD
 
 class MainViewController: UIViewController {
     
@@ -181,9 +182,10 @@ extension MainViewController: UIPickerViewDataSource, UIPickerViewDelegate {
         let diff = String(row + 1)
         let title = titles[row]
         self.title = title
+        self.timerView.resetTimer()
+        ProgressHUD.show()
         DispatchQueue.global(qos: .userInitiated).async {
             self.sudokuVC.generateSudoku(with: diff)
         }
     }
-    
 }

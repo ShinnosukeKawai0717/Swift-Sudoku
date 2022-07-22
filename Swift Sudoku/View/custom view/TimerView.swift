@@ -57,6 +57,10 @@ class TimerView: UIView {
         self.shouldStop = false
         self.startTimer()
     }
+    func resetTimer() {
+        self.second = 0
+        self.minutes = 0
+    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
