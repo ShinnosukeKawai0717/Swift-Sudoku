@@ -69,6 +69,7 @@ class MainViewController: UIViewController {
     @objc func saveDidTap() {
         let difficulty = self.title ?? "easy"
         sudokuVC.saveFavorite(difficulty: difficulty)
+        timerView.stopTimer()
     }
     
     @objc func historyDidTap() {
@@ -145,24 +146,16 @@ extension MainViewController: KeyboardViewControllerDelegate {
 
 extension MainViewController: SudokuBoardViewControllerDelegate {
     func timerShouldStart() {
-        var second = 0
-        var minutes = 0
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-            guard let strongSelf = self else {
-                return
-            }
-            if second == 60  {
-                second = 0
-                minutes += 1
-            }
-            let second_str = second < 10 ? "0\(second)" : "\(second)"
-            let minu_str = minutes < 10 ? "0\(minutes)" : "\(minutes)"
-            
-            DispatchQueue.main.async {
-                strongSelf.timerView.configure(text: "\(minu_str) : \(second_str)")
-            }
-            second += 1
-        }.fire()
+        print("Timer starting....")
+        DispatchQueue.main.async {
+            print("Timer started")
+            self.timerView.startTimer()
+        }
+    }
+    func timerShouldRestart() {
+        DispatchQueue.main.async {
+            self.timerView.restart()
+        }
     }
 }
 

@@ -11,6 +11,7 @@ import RealmSwift
 
 protocol SudokuBoardViewControllerDelegate: AnyObject {
     func timerShouldStart()
+    func timerShouldRestart()
 }
 
 class SudokuBoardViewController: UIViewController {
@@ -70,7 +71,8 @@ class SudokuBoardViewController: UIViewController {
         sudokuGridCollectionView.delegate = self
         sudokuGridCollectionView.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
-        DispatchQueue.global(qos: .background).async {
+        ProgressHUD.show()
+        DispatchQueue.global().async {
             self.generateSudoku(with: "1")
         }
     }
@@ -96,10 +98,6 @@ class SudokuBoardViewController: UIViewController {
     }
     
     public func generateSudoku(with diff: String) {
-        DispatchQueue.main.async {
-            ProgressHUD.colorAnimation = .systemGray
-            ProgressHUD.show()
-        }
         hintIndexPaths.removeAll()
         selectedIndex = nil
         SudokuManager.shared.generate(diff: diff) { [weak self] result in
@@ -109,18 +107,16 @@ class SudokuBoardViewController: UIViewController {
             switch result {
             case .success(let unsolvedSudoku):
                 strongSelf.unsolvedBoard = unsolvedSudoku
+                strongSelf.delegate?.timerShouldStart()
                 ProgressHUD.showSuccess()
                 guard let copy = unsolvedSudoku.copy(with: nil) as? Sudoku else {
                     return
                 }
-                DispatchQueue.global(qos: .background).async {
-                    if let solvedOne = strongSelf.sudokuManager.solve(sudoku: copy) {
-                        strongSelf.solvedBoard = solvedOne
-                        strongSelf.delegate?.timerShouldStart()
-                        DispatchQueue.main.async {
-                            let totastView = ToastView(toast: strongSelf.toast, frame: CGRect(x: 0, y: 0, width: strongSelf.view.frame.size.width/1.2, height: 60))
-                            totastView.show(on: strongSelf.sudokuGridCollectionView)
-                        }
+                if let solvedOne = strongSelf.sudokuManager.solve(sudoku: copy) {
+                    strongSelf.solvedBoard = solvedOne
+                    DispatchQueue.main.async {
+                        let totastView = ToastView(toast: strongSelf.toast, frame: CGRect(x: 0, y: 0, width: strongSelf.view.frame.size.width/1.2, height: 60))
+                        totastView.show(on: strongSelf.sudokuGridCollectionView)
                     }
                 }
             case .failure(let error):
@@ -194,7 +190,12 @@ class SudokuBoardViewController: UIViewController {
             textFeild.keyboardType = .emailAddress
             textFeild.autocapitalizationType = .sentences
         }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] action in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.delegate?.timerShouldRestart()
+        }
         let done = UIAlertAction(title: "Done", style: .default) { [weak self] action in
             guard let strongSelf = self else {
                 return
@@ -203,6 +204,7 @@ class SudokuBoardViewController: UIViewController {
             strongSelf.unsolvedBoard.name = result ?? "My problem"
             strongSelf.unsolvedBoard.dateAdded = Date()
             strongSelf.databaseManager.save(newFavorite: strongSelf.unsolvedBoard)
+            strongSelf.delegate?.timerShouldRestart()
             strongSelf.databaseManager.printRealmURL()
         }
         
