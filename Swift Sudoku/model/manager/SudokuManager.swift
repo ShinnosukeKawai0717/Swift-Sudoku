@@ -70,28 +70,6 @@ class SudokuManager {
         completion(.success(sudoku))
     }
     
-//    public func solve(matrix: [[Number]]) -> [[Number]]? {
-//        var board = matrix
-//        for colum in 0..<9 {
-//            for row in 0..<9 {
-//                if board[colum][row].value == 0 {
-//                    for possibleNumber in 1...9 {
-//                        if isValiedPlacement(board: board, number: possibleNumber, row: row, colum: colum) {
-//                            board[colum][row].value = possibleNumber
-//                            let result = solve(matrix: board)
-//                            if result != nil {
-//                                return result
-//                            }
-//                            board[colum][colum].value = 0
-//                        }
-//                    }
-//                    return nil
-//                }
-//            }
-//        }
-//        return board
-//    }
-    
     public func solve(sudoku: Sudoku) -> Sudoku? {
         for colum in 0..<9 {
             for row in 0..<9 {
@@ -113,31 +91,6 @@ class SudokuManager {
         return sudoku
     }
     
-//    public func isVailedSolution(board: [[Number]]) -> Bool {
-//        var seen = Set<String>()
-//        for colum in 0..<9 {
-//            for row in 0..<9 {
-//                let curr = String(board[colum][row].value)
-//                let isInRow = seen.insert("\(curr) found in row \(row)").inserted
-//                let isInColum = seen.insert("\(curr) found in colum \(colum)").inserted
-//                let isInBox = seen.insert("\(curr) found in sub box \(row/3) - \(colum/3)").inserted
-//                if !isInRow || !isInColum || !isInBox {
-//                    return false
-//                }
-//            }
-//        }
-//        return true
-//    }
-//
-//    private func isNumberInRow(board: [[Number]], number: Int, row: Int) -> Bool {
-//        for i in 0..<9 {
-//            if board[i][row].value == number {
-//                return true
-//            }
-//        }
-//        return false
-//    }
-    
     private func isNumberInRow(board: Sudoku, number: Int, row: Int) -> Bool {
         for i in 0..<9 {
             if board.unsolvedSudoku[i].rowValues[row].number == number {
@@ -146,16 +99,6 @@ class SudokuManager {
         }
         return false
     }
-    
-//    private func isNumberInColum(board: [[Number]], number: Int, colum: Int) -> Bool {
-//        for i in 0..<9 {
-//            if board[colum][i].value == number {
-//                return true
-//            }
-//        }
-//        return false
-//    }
-    
     private func isNumberInColum(board: Sudoku, number: Int, colum: Int) -> Bool {
         for i in 0..<9 {
             if board.unsolvedSudoku[colum].rowValues[i].number == number {
@@ -164,19 +107,6 @@ class SudokuManager {
         }
         return false
     }
-    
-//    private func isNumberInSubBox(board: [[Number]], number: Int, row: Int, colum: Int) -> Bool {
-//        let localRow: Int = row - row % 3
-//        let localColum: Int = colum - colum % 3
-//        for i in localRow..<localRow + 3 {
-//            for j in localColum..<localColum + 3 {
-//                if board[j][i].value == number {
-//                    return true
-//                }
-//            }
-//        }
-//        return false
-//    }
     
     private func isNumberInSubBox(board: Sudoku, number: Int, colum: Int, row: Int) -> Bool {
         let localRow: Int = row - row % 3
@@ -190,12 +120,6 @@ class SudokuManager {
         }
         return false
     }
-    
-//    private func isValiedPlacement(board: [[Number]], number: Int, row: Int, colum: Int) -> Bool{
-//        return !isNumberInRow(board: board, number: number, row: row) &&
-//                !isNumberInColum(board: board, number: number, colum: colum) &&
-//                !isNumberInSubBox(board: board, number: number, row: row, colum: colum)
-//    }
     
     private func isValiedPlacement(board: Sudoku, number: Int, row: Int, colum: Int) -> Bool{
         return !isNumberInRow(board: board, number: number, row: row) &&
