@@ -45,3 +45,25 @@ public func ==(lhs: CGPoint, rhs: CGPoint) -> Bool {
     return lhs.equalTo(rhs)
 }
 
+extension UINavigationController {
+    func pushViewControllerFromLeft(_ vc: UIViewController) {
+        let transition = CATransition()
+        transition.type = .push
+        transition.duration = 0.5
+        transition.subtype = .fromLeft
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        view.window!.layer.add(transition, forKey: kCATransition)
+        pushViewController(vc, animated: false)
+    }
+    
+    func popViewControllerToLeft() {
+        let transition = CATransition()
+        transition.type = .push
+        transition.duration = 0.5
+        transition.subtype = .fromRight
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        view.window!.layer.add(transition, forKey: kCATransition)
+        popViewController(animated: false)
+    }
+    
+}

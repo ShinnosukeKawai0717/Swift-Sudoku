@@ -14,6 +14,7 @@ class MainViewController: UIViewController {
     private let sudokuVC = SudokuBoardViewController()
     private let keyBoardVC = KeyboardViewController()
     private let favoriteListVC = FavoriteListViewController()
+    private let tutorialVC = TutorialViewController()
     private let sudokuGridView = SudokuGridView()
     private let titles: [String] = ["Easy", "Medium", "Hard"]
     private let diffPickerView: UIPickerView = {
@@ -67,6 +68,22 @@ class MainViewController: UIViewController {
         initNavigationItems()
     }
     
+    private func initNavigationItems() {
+        var configuration = UIImage.SymbolConfiguration(hierarchicalColor: .systemPink)
+        let heart_fill = UIImage(systemName: "heart.fill", withConfiguration: configuration)
+        
+        configuration = UIImage.SymbolConfiguration(hierarchicalColor: .systemGray)
+        let history = UIImage(systemName: "bookmark", withConfiguration: configuration)
+        
+        let help = UIImage(systemName: "questionmark.circle", withConfiguration: configuration)
+        
+        let saveItem = UIBarButtonItem(image: heart_fill, style: .plain, target: self, action: #selector(saveDidTap))
+        let historyItem = UIBarButtonItem(image: history, style: .plain, target: self, action: #selector(historyDidTap))
+        let helpItem = UIBarButtonItem(image: help, style: .plain, target: self, action: #selector(helpDidTap))
+        self.navigationItem.rightBarButtonItems = [historyItem, saveItem]
+        self.navigationItem.leftBarButtonItem = helpItem
+    }
+    
     @objc func saveDidTap() {
         let difficulty = self.title ?? "easy"
         sudokuVC.saveFavorite(difficulty: difficulty)
@@ -77,17 +94,8 @@ class MainViewController: UIViewController {
         navigationController?.pushViewController(favoriteListVC, animated: true)
     }
     
-    private func initNavigationItems() {
-        var configuration = UIImage.SymbolConfiguration(hierarchicalColor: .systemPink)
-        let heart_fill = UIImage(systemName: "heart.fill", withConfiguration: configuration)
-        
-        configuration = UIImage.SymbolConfiguration(hierarchicalColor: .systemGray)
-        let history = UIImage(systemName: "bookmark", withConfiguration: configuration)
-        
-        let saveItem = UIBarButtonItem(image: heart_fill, style: .plain, target: self, action: #selector(saveDidTap))
-        let historyItem = UIBarButtonItem(image: history, style: .plain, target: self, action: #selector(historyDidTap))
-        
-        self.navigationItem.rightBarButtonItems = [historyItem, saveItem]
+    @objc func helpDidTap() {
+        navigationController?.pushViewControllerFromLeft(tutorialVC)
     }
     
     private func addConstraints() {
