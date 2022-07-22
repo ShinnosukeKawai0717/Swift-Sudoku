@@ -75,7 +75,7 @@ class SudokuBoardViewController: UIViewController {
         
         let queue = DispatchGroup()
         queue.enter()
-        DispatchQueue.global().async {
+        DispatchQueue.global(qos: .userInitiated).async {
             self.generateSudoku(with: "1")
             queue.leave()
         }
