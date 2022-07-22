@@ -13,8 +13,8 @@ class SudokuBoardViewController: UIViewController {
     
     let toast = Toast(type: .info,
                       message: "The problem has been solved",
-                      image: UIImage(systemName: "checkmark.circle.fill", withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .systemGreen)))
-    private let realm = try! Realm()
+                      image: UIImage(systemName: "checkmark.circle.fill",
+                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .systemGreen)))
     private let sudokuManager = SudokuManager()
     private let databaseManager = DatabaseManager()
     private var hintIndexPaths: [IndexPath] = []
@@ -25,8 +25,6 @@ class SudokuBoardViewController: UIViewController {
             DispatchQueue.main.async {
                 self.sudokuGridCollectionView.reloadData()
             }
-        
-            
         }
     }
     private var selectedIndex: IndexPath? {
@@ -187,6 +185,7 @@ class SudokuBoardViewController: UIViewController {
         uiAlert.addTextField { textFeild in
             textFeild.placeholder = "Enter here..."
             textFeild.keyboardType = .emailAddress
+            textFeild.autocapitalizationType = .sentences
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let done = UIAlertAction(title: "Done", style: .default) { [weak self] action in
@@ -202,7 +201,7 @@ class SudokuBoardViewController: UIViewController {
         uiAlert.addAction(done)
         uiAlert.addAction(cancel)
         
-        present(uiAlert, animated: true)
+        self.present(uiAlert, animated: true)
     }
 }
 
