@@ -101,16 +101,16 @@
 		7DAB5DCF288ABB7F006FA9CD /* Swift Sudoku */ = {
 			isa = PBXGroup;
 			children = (
-				7DAB5E04288ABE52006FA9CD /* controller */,
-				7DAB5E0B288ABF15006FA9CD /* view */,
-				7DAB5E07288ABE7D006FA9CD /* model */,
+				7DAB5E04288ABE52006FA9CD /* Controller */,
+				7DAB5E0B288ABF15006FA9CD /* View */,
+				7DAB5E07288ABE7D006FA9CD /* Model */,
 				7DAB5DD9288ABB7F006FA9CD /* Assets.xcassets */,
 				7DAB5DDE288ABB7F006FA9CD /* Info.plist */,
 			);
 			path = "Swift Sudoku";
 			sourceTree = "<group>";
 		};
-		7DAB5E04288ABE52006FA9CD /* controller */ = {
+		7DAB5E04288ABE52006FA9CD /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				7DAB5DFC288ABD0F006FA9CD /* FavoriteListViewController.swift */,
@@ -118,7 +118,7 @@
 				7DAB5DFD288ABD0F006FA9CD /* MainViewController.swift */,
 				7DAB5DFF288ABD10006FA9CD /* SudokuBoardViewController.swift */,
 			);
-			path = controller;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		7DAB5E05288ABE64006FA9CD /* custom view */ = {
@@ -141,14 +141,14 @@
 			path = "custom cell";
 			sourceTree = "<group>";
 		};
-		7DAB5E07288ABE7D006FA9CD /* model */ = {
+		7DAB5E07288ABE7D006FA9CD /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				7DAB5E09288ABEA7006FA9CD /* extensions */,
 				7DAB5E08288ABE8D006FA9CD /* manager */,
 				7DAB5E0A288ABEB1006FA9CD /* data models */,
 			);
-			path = model;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		7DAB5E08288ABE8D006FA9CD /* manager */ = {
@@ -178,7 +178,7 @@
 			path = "data models";
 			sourceTree = "<group>";
 		};
-		7DAB5E0B288ABF15006FA9CD /* view */ = {
+		7DAB5E0B288ABF15006FA9CD /* View */ = {
 			isa = PBXGroup;
 			children = (
 				7DAB5E06288ABE6E006FA9CD /* custom cell */,
@@ -188,7 +188,7 @@
 				7DAB5DD6288ABB7F006FA9CD /* Main.storyboard */,
 				7DAB5DDB288ABB7F006FA9CD /* LaunchScreen.storyboard */,
 			);
-			path = view;
+			path = View;
 			sourceTree = "<group>";
 		};
 		EC0528F1DFDC47204C277B55 /* Pods */ = {
