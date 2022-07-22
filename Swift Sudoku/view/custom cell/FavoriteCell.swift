@@ -15,6 +15,7 @@ class FavoriteCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20)
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -23,12 +24,25 @@ class FavoriteCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20)
         label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let dateLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.textAlignment = .center
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(difficultyLabel)
+        contentView.addSubview(dateLabel)
     }
     
     public func configure(favorite: Sudoku) {
@@ -50,20 +64,16 @@ class FavoriteCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(difficultyLabel)
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            nameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             nameLabel.widthAnchor.constraint(equalToConstant: contentView.frame.width/1.5)
         ])
         
         NSLayoutConstraint.activate([
-            difficultyLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             difficultyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             difficultyLabel.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            difficultyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            difficultyLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
     
