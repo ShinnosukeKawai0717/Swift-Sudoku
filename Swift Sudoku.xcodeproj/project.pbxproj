@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		77A45823AE9486B544B4D313 /* Pods_Swift_Sudoku.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3428ABF9BC9A0E4ADD63B02 /* Pods_Swift_Sudoku.framework */; };
+		7D451086288AFE3100A3D1EC /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D451085288AFE3100A3D1EC /* TutorialViewController.swift */; };
 		7DAB5DD1288ABB7F006FA9CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DD0288ABB7F006FA9CD /* AppDelegate.swift */; };
 		7DAB5DD3288ABB7F006FA9CD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DD2288ABB7F006FA9CD /* SceneDelegate.swift */; };
 		7DAB5DD8288ABB7F006FA9CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DAB5DD6288ABB7F006FA9CD /* Main.storyboard */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		012002C13BD6FF7DB56286FA /* Pods-Swift Sudoku.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swift Sudoku.release.xcconfig"; path = "Target Support Files/Pods-Swift Sudoku/Pods-Swift Sudoku.release.xcconfig"; sourceTree = "<group>"; };
+		7D451085288AFE3100A3D1EC /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		7DAB5DCD288ABB7F006FA9CD /* Swift Sudoku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swift Sudoku.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DAB5DD0288ABB7F006FA9CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7DAB5DD2288ABB7F006FA9CD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				7DAB5DFE288ABD0F006FA9CD /* KeyboardViewController.swift */,
 				7DAB5DFD288ABD0F006FA9CD /* MainViewController.swift */,
 				7DAB5DFF288ABD10006FA9CD /* SudokuBoardViewController.swift */,
+				7D451085288AFE3100A3D1EC /* TutorialViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				7DAB5DD3288ABB7F006FA9CD /* SceneDelegate.swift in Sources */,
 				7DAB5E01288ABD10006FA9CD /* MainViewController.swift in Sources */,
 				7DAB5DF4288ABCE8006FA9CD /* FavoriteCell.swift in Sources */,
+				7D451086288AFE3100A3D1EC /* TutorialViewController.swift in Sources */,
 				7DAB5E03288ABD10006FA9CD /* SudokuBoardViewController.swift in Sources */,
 				7DAB5DF9288ABCFE006FA9CD /* ToastView.swift in Sources */,
 				7DAB5DE9288ABC9D006FA9CD /* SudokuManager.swift in Sources */,
