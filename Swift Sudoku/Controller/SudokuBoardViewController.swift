@@ -130,7 +130,7 @@ class SudokuBoardViewController: UIViewController {
         }
     }
     
-    public func reloadBoard(with favorite: Sudoku, and indexPath: IndexPath) {
+    public func reloadBoard(indexPath: IndexPath) {
         selectedIndex = nil
         self.unsolvedSudoku = savedSudoku?[indexPath.row] ?? Sudoku()
         let copy = self.unsolvedSudoku.copy(with: nil) as! Sudoku

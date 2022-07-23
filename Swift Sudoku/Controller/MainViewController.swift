@@ -171,7 +171,7 @@ extension MainViewController: SudokuBoardViewControllerDelegate {
 
 extension MainViewController: FavoriteListViewControllerDelegate {
     func favoriteListViewController(_ vc: FavoriteListViewController, didSelecte favorite: Sudoku, at indexPath: IndexPath) {
-        self.sudokuVC.reloadBoard(with: favorite, and: indexPath)
+        self.sudokuVC.reloadBoard(indexPath: indexPath)
     }
 }
 
@@ -179,11 +179,12 @@ extension MainViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return titles.count
     }
-    
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return CGFloat(40)
+    }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return titles[row]
     }
