@@ -18,7 +18,7 @@ class Value: Object, ObjectKeyIdentifiable {
 
 class Column: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var id: ObjectId
-    @Persisted(originProperty: "unsolvedSudoku") private var sudoku: LinkingObjects<Sudoku>
+    @Persisted(originProperty: "board") private var sudoku: LinkingObjects<Sudoku>
     
     @Persisted var rowValues = List<Value>()
 }
@@ -30,7 +30,7 @@ class Sudoku: Object, ObjectKeyIdentifiable, NSCopying {
     @Persisted var name: String = ""
     @Persisted var dateAdded: Date = Date()
     @Persisted private var difficulty = ""
-    @Persisted var unsolvedSudoku = List<Column>()
+    @Persisted var board = List<Column>()
     var diff: Difficulty {
         get {
             return Difficulty(rawValue: difficulty.lowercased()) ?? .easy
@@ -45,7 +45,7 @@ class Sudoku: Object, ObjectKeyIdentifiable, NSCopying {
         copy.name = name
         copy.dateAdded = dateAdded
         copy.diff = diff
-        for colum in unsolvedSudoku {
+        for colum in board {
             let colums = Column()
             for row in colum.rowValues {
                 let value = Value()
@@ -54,7 +54,7 @@ class Sudoku: Object, ObjectKeyIdentifiable, NSCopying {
                 value.isHint = row.isHint
                 colums.rowValues.append(value)
             }
-            copy.unsolvedSudoku.append(colums)
+            copy.board.append(colums)
         }
         return copy
     }

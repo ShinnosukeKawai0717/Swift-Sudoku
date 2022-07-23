@@ -25,8 +25,8 @@ class SudokuBoardViewController: UIViewController {
     private let databaseManager = DatabaseManager()
     private var hintIndexPaths: [IndexPath] = []
     private var savedSudoku: Results<Sudoku>?
-    private var solvedBoard: Sudoku = Sudoku()
-    private var unsolvedBoard: Sudoku = Sudoku() {
+    private var solvedSudoku: Sudoku = Sudoku()
+    private var unsolvedSudoku: Sudoku = Sudoku() {
         didSet {
             DispatchQueue.main.async {
                 self.sudokuGridCollectionView.reloadData()
@@ -113,13 +113,13 @@ class SudokuBoardViewController: UIViewController {
             }
             switch result {
             case .success(let unsolvedSudoku):
-                strongSelf.unsolvedBoard = unsolvedSudoku
+                strongSelf.unsolvedSudoku = unsolvedSudoku
                 ProgressHUD.dismiss()
                 guard let copy = unsolvedSudoku.copy(with: nil) as? Sudoku else {
                     return
                 }
                 if let solvedOne = strongSelf.sudokuManager.solve(sudoku: copy) {
-                    strongSelf.solvedBoard = solvedOne
+                    strongSelf.solvedSudoku = solvedOne
                     DispatchQueue.main.async {
                         let totastView = ToastView(toast: strongSelf.toast, frame: CGRect(x: 0, y: 0, width: strongSelf.view.frame.size.width/1.2, height: 60))
                         totastView.show(on: strongSelf.sudokuGridCollectionView)
@@ -135,11 +135,11 @@ class SudokuBoardViewController: UIViewController {
     public func reloadBoard(with favorite: Sudoku, and indexPath: IndexPath) {
         selectedIndex = nil
         hintIndexPaths.removeAll()
-        self.unsolvedBoard = savedSudoku?[indexPath.row] ?? Sudoku()
-        let copy = self.unsolvedBoard.copy(with: nil) as! Sudoku
+        self.unsolvedSudoku = savedSudoku?[indexPath.row] ?? Sudoku()
+        let copy = self.unsolvedSudoku.copy(with: nil) as! Sudoku
         DispatchQueue.global(qos: .background).async {
             if let solvedBord = self.sudokuManager.solve(sudoku: copy) {
-                self.solvedBoard = solvedBord
+                self.solvedSudoku = solvedBord
                 DispatchQueue.main.async {
                     let totastView = ToastView(toast: self.toast, frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width/1.2, height: 60))
                     totastView.show(on: self.sudokuGridCollectionView)
@@ -151,8 +151,8 @@ class SudokuBoardViewController: UIViewController {
     
     public func modifyBoard(with letter: String) {
         if let selectedIndex = selectedIndex {
-            if self.unsolvedBoard.unsolvedSudoku[selectedIndex.section].rowValues[selectedIndex.row].isZero {
-                databaseManager.update(sudoku: self.unsolvedBoard, newValue: Int(letter)!, at: selectedIndex)
+            if self.unsolvedSudoku.board[selectedIndex.section].rowValues[selectedIndex.row].isZero {
+                databaseManager.update(sudoku: self.unsolvedSudoku, newValue: Int(letter)!, at: selectedIndex)
                 DispatchQueue.main.async {
                     self.sudokuGridCollectionView.reloadItems(at: [selectedIndex])
                 }
@@ -170,16 +170,16 @@ class SudokuBoardViewController: UIViewController {
         var indePaths = Set<IndexPath>()
         for row in 0..<9 {
             for colum in 0..<9 {
-                if self.unsolvedBoard.unsolvedSudoku[colum].rowValues[row].number == 0 {
+                if self.unsolvedSudoku.board[colum].rowValues[row].number == 0 {
                     indePaths.insert(IndexPath(row: row, section: colum))
                 }
             }
         }
         let ramdomIndexPath = indePaths.randomElement()!
         self.hintIndexPaths.append(ramdomIndexPath)
-        let hint = solvedBoard.unsolvedSudoku[ramdomIndexPath.section].rowValues[ramdomIndexPath.row].number
+        let hint = solvedSudoku.board[ramdomIndexPath.section].rowValues[ramdomIndexPath.row].number
         
-        databaseManager.updateForHint(sudoku: unsolvedBoard, newValue: hint, at: ramdomIndexPath)
+        databaseManager.updateForHint(sudoku: unsolvedSudoku, newValue: hint, at: ramdomIndexPath)
         DispatchQueue.main.async {
             self.sudokuGridCollectionView.reloadItems(at: [ramdomIndexPath])
         }
@@ -189,7 +189,7 @@ class SudokuBoardViewController: UIViewController {
         hintIndexPaths.removeAll()
         selectedIndex = nil
         
-        self.unsolvedBoard = solvedBoard
+        self.unsolvedSudoku = solvedSudoku
     }
     
     public func saveFavorite(difficulty: String) {
@@ -210,9 +210,9 @@ class SudokuBoardViewController: UIViewController {
                 return
             }
             let result = uiAlert.textFields![0].text
-            strongSelf.unsolvedBoard.name = result ?? "My problem"
-            strongSelf.unsolvedBoard.dateAdded = Date()
-            strongSelf.databaseManager.save(newFavorite: strongSelf.unsolvedBoard)
+            strongSelf.unsolvedSudoku.name = result ?? "My problem"
+            strongSelf.unsolvedSudoku.dateAdded = Date()
+            strongSelf.databaseManager.save(newFavorite: strongSelf.unsolvedSudoku)
             strongSelf.delegate?.timerShouldRestart()
             strongSelf.databaseManager.printRealmURL()
         }
@@ -226,27 +226,20 @@ class SudokuBoardViewController: UIViewController {
 
 extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.unsolvedBoard.unsolvedSudoku[section].rowValues.count
+        return self.unsolvedSudoku.board[section].rowValues.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SudokuCollectionViewCell.identifier, for: indexPath) as? SudokuCollectionViewCell else {
             fatalError()
         }
-//        if hintIndexPaths.contains(indexPath) {
-//            let hintNum = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number
-//            cell.configureLabel(with: hintNum != 0 ? String(hintNum) : "", textColor: .systemRed)
-//            return cell
-//        }
-//        let number = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number
-//        cell.configureLabel(with: number != 0 ? String(number) : "", textColor: .systemCyan)
         if selectedIndex != nil {
             DispatchQueue.main.async {
                 cell.contentView.backgroundColor = .secondaryLabel
             }
         }
-        let number = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number
-        let isHint = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].isHint
+        let number = self.unsolvedSudoku.board[indexPath.section].rowValues[indexPath.row].number
+        let isHint = self.unsolvedSudoku.board[indexPath.section].rowValues[indexPath.row].isHint
         
         if isHint {
             cell.configureLabel(with: number == 0 ? "" : String(number), textColor: .systemRed)
@@ -256,8 +249,6 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
             cell.configureLabel(with: number == 0 ? "" : String(number), textColor: .systemCyan)
             return cell
         }
-        
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -287,6 +278,6 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.unsolvedBoard.unsolvedSudoku.count
+        return self.unsolvedSudoku.board.count
     }
 }

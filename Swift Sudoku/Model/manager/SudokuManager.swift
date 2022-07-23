@@ -63,7 +63,7 @@ class SudokuManager {
                 value.isHint = false
                 columObj.rowValues.append(value)
             }
-            sudoku.unsolvedSudoku.append(columObj)
+            sudoku.board.append(columObj)
         }
         guard let completion = completion else {
             return
@@ -74,15 +74,15 @@ class SudokuManager {
     public func solve(sudoku: Sudoku) -> Sudoku? {
         for colum in 0..<9 {
             for row in 0..<9 {
-                if sudoku.unsolvedSudoku[colum].rowValues[row].number == 0 {
+                if sudoku.board[colum].rowValues[row].number == 0 {
                     for possibleNumber in 1...9 {
                         if isValiedPlacement(board: sudoku, number: possibleNumber, row: row, colum: colum) {
-                            sudoku.unsolvedSudoku[colum].rowValues[row].number = possibleNumber
+                            sudoku.board[colum].rowValues[row].number = possibleNumber
                             let result = solve(sudoku: sudoku)
                             if result != nil {
                                 return result
                             }
-                            sudoku.unsolvedSudoku[colum].rowValues[row].number = 0
+                            sudoku.board[colum].rowValues[row].number = 0
                         }
                     }
                     return nil
@@ -94,7 +94,7 @@ class SudokuManager {
     
     private func isNumberInRow(board: Sudoku, number: Int, row: Int) -> Bool {
         for i in 0..<9 {
-            if board.unsolvedSudoku[i].rowValues[row].number == number {
+            if board.board[i].rowValues[row].number == number {
                 return true
             }
         }
@@ -102,7 +102,7 @@ class SudokuManager {
     }
     private func isNumberInColum(board: Sudoku, number: Int, colum: Int) -> Bool {
         for i in 0..<9 {
-            if board.unsolvedSudoku[colum].rowValues[i].number == number {
+            if board.board[colum].rowValues[i].number == number {
                 return true
             }
         }
@@ -114,7 +114,7 @@ class SudokuManager {
         let localColum: Int = colum - colum % 3
         for i in localColum..<localColum + 3 {
             for j in localRow..<localRow + 3 {
-                if board.unsolvedSudoku[i].rowValues[j].number == number {
+                if board.board[i].rowValues[j].number == number {
                     return true
                 }
             }

@@ -28,8 +28,7 @@ class DatabaseManager {
     public func update(sudoku: Sudoku, newValue: Int, at indexPath: IndexPath) {
         do {
             try realm.write({
-                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number = newValue
-                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].isZero = false
+                sudoku.board[indexPath.section].rowValues[indexPath.row].number = newValue
             })
         } catch {
             print(error.localizedDescription)
@@ -39,9 +38,9 @@ class DatabaseManager {
     public func updateForHint(sudoku: Sudoku, newValue: Int, at indexPath: IndexPath) {
         do {
             try realm.write({
-                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number = newValue
-                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].isHint = true
-                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].isZero = false
+                sudoku.board[indexPath.section].rowValues[indexPath.row].number = newValue
+                sudoku.board[indexPath.section].rowValues[indexPath.row].isHint = true
+                sudoku.board[indexPath.section].rowValues[indexPath.row].isZero = false
             })
         } catch {
             print(error.localizedDescription)
@@ -51,12 +50,12 @@ class DatabaseManager {
     public func delete(favorite: Sudoku) {
         do {
             try realm.write({
-                for colum in favorite.unsolvedSudoku {
+                for colum in favorite.board {
                     for row in colum.rowValues {
                         realm.delete(row)
                     }
                 }
-                realm.delete(favorite.unsolvedSudoku)
+                realm.delete(favorite.board)
                 realm.delete(favorite)
             })
         } catch {
