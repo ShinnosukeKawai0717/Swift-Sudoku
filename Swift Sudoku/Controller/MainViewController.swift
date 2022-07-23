@@ -12,6 +12,7 @@ import ProgressHUD
 class MainViewController: UIViewController {
     
     private let sudokuVC = SudokuBoardViewController()
+    private let integer = 0
     private let keyBoardVC = KeyboardViewController()
     private let favoriteListVC = FavoriteListViewController()
     private let tutorialVC = TutorialViewController()
