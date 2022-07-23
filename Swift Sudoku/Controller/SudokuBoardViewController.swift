@@ -23,7 +23,6 @@ class SudokuBoardViewController: UIViewController {
     weak var delegate: SudokuBoardViewControllerDelegate?
     private let sudokuManager = SudokuManager()
     private let databaseManager = DatabaseManager()
-    private var hintIndexPaths: [IndexPath] = []
     private var savedSudoku: Results<Sudoku>?
     private var solvedSudoku: Sudoku = Sudoku()
     private var unsolvedSudoku: Sudoku = Sudoku() {
@@ -104,7 +103,6 @@ class SudokuBoardViewController: UIViewController {
     }
     
     public func generateSudoku(with diff: String) {
-        hintIndexPaths.removeAll()
         selectedIndex = nil
         ProgressHUD.show()
         SudokuManager.shared.generate(diff: diff) { [weak self] result in
@@ -134,7 +132,6 @@ class SudokuBoardViewController: UIViewController {
     
     public func reloadBoard(with favorite: Sudoku, and indexPath: IndexPath) {
         selectedIndex = nil
-        hintIndexPaths.removeAll()
         self.unsolvedSudoku = savedSudoku?[indexPath.row] ?? Sudoku()
         let copy = self.unsolvedSudoku.copy(with: nil) as! Sudoku
         DispatchQueue.global(qos: .background).async {
@@ -176,7 +173,6 @@ class SudokuBoardViewController: UIViewController {
             }
         }
         let ramdomIndexPath = indePaths.randomElement()!
-        self.hintIndexPaths.append(ramdomIndexPath)
         let hint = solvedSudoku.board[ramdomIndexPath.section].rowValues[ramdomIndexPath.row].number
         
         databaseManager.updateForHint(sudoku: unsolvedSudoku, newValue: hint, at: ramdomIndexPath)
@@ -186,9 +182,7 @@ class SudokuBoardViewController: UIViewController {
     }
     
     public func solve() {
-        hintIndexPaths.removeAll()
         selectedIndex = nil
-        
         self.unsolvedSudoku = solvedSudoku
     }
     
