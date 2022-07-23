@@ -158,8 +158,8 @@ extension MainViewController: SudokuBoardViewControllerDelegate {
     func timerShouldStart() {
         print("Timer starting....")
         DispatchQueue.main.async {
-            print("Timer started")
             self.timerView.startTimer()
+            print("Timer started")
         }
     }
     func timerShouldRestart() {
