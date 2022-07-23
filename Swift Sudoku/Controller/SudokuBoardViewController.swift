@@ -16,7 +16,7 @@ protocol SudokuBoardViewControllerDelegate: AnyObject {
 
 class SudokuBoardViewController: UIViewController {
     
-    let toast = Toast(type: .info,
+    private let toast = Toast(type: .info,
                       message: "The problem has been solved",
                       image: UIImage(systemName: "checkmark.circle.fill",
                                      withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .systemGreen)))
