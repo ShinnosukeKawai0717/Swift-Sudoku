@@ -14,6 +14,7 @@ class Value: Object, ObjectKeyIdentifiable {
     
     @Persisted private var value: Int = 0
     public var isZero: Bool = false
+    public var textColor: UIColor = .systemCyan
     
     var number: Int {
         get {
@@ -25,7 +26,7 @@ class Value: Object, ObjectKeyIdentifiable {
     }
     
     override class func ignoredProperties() -> [String] {
-        return ["number", "isZero"]
+        return ["number", "isZero", "textColor"]
     }
 }
 
