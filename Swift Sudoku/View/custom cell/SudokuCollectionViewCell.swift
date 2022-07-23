@@ -22,28 +22,10 @@ class SudokuCollectionViewCell: UICollectionViewCell {
         self.backgroundColor = .clear
     }
     
-    public func configure(with number: String) {
-        DispatchQueue.main.async {
-            self.cellLabel.text = number
-        }
-    }
-    
     public func configureLabel(with number: String, textColor: UIColor) {
         DispatchQueue.main.async {
             self.cellLabel.text = number
             self.cellLabel.textColor = textColor
-        }
-    }
-    
-    public func configureLabel(edge: UIRectEdge, color: UIColor, thickness: CGFloat) {
-        DispatchQueue.main.async {
-            self.cellLabel.addBorder(toSide: edge, withColor: color, andThickness: thickness)
-        }
-    }
-    
-    public func configure(backGroundColor: UIColor) {
-        DispatchQueue.main.async {
-            self.cellLabel.backgroundColor = .systemGray2
         }
     }
     

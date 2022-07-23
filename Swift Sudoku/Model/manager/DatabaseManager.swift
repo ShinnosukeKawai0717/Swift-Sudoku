@@ -35,6 +35,17 @@ class DatabaseManager {
         }
     }
     
+    public func update(sudoku: Sudoku, newValue: Int, at indexPath: IndexPath, newColor: UIColor) {
+        do {
+            try realm.write({
+                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number = newValue
+                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].textColor = newColor
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     public func delete(favorite: Sudoku) {
         do {
             try realm.write({

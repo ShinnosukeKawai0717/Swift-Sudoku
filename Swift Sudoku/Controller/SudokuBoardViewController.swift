@@ -176,7 +176,7 @@ class SudokuBoardViewController: UIViewController {
         self.hintIndexPaths.append(ramdomIndexPath)
         let hint = solvedBoard.unsolvedSudoku[ramdomIndexPath.section].rowValues[ramdomIndexPath.row].number
         
-        databaseManager.update(sudoku: unsolvedBoard, newValue: hint, at: ramdomIndexPath)
+        databaseManager.update(sudoku: unsolvedBoard, newValue: hint, at: ramdomIndexPath, newColor: .systemRed)
         DispatchQueue.main.async {
             self.sudokuGridCollectionView.reloadItems(at: [ramdomIndexPath])
         }
@@ -232,11 +232,13 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         }
         if hintIndexPaths.contains(indexPath) {
             let hintNum = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number
-            cell.configureLabel(with: hintNum != 0 ? String(hintNum) : "", textColor: .systemRed)
+            let hintColor = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].textColor
+            cell.configureLabel(with: hintNum != 0 ? String(hintNum) : "", textColor: hintColor)
             return cell
         }
         let number = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number
-        cell.configureLabel(with: number != 0 ? String(number) : "", textColor: .systemCyan)
+        let color = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].textColor
+        cell.configureLabel(with: number != 0 ? String(number) : "", textColor: color)
         
         if selectedIndex != nil {
             DispatchQueue.main.async {
