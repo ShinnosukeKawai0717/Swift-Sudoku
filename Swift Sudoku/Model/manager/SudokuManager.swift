@@ -60,6 +60,7 @@ class SudokuManager {
                 let value = Value()
                 value.number = row
                 value.isZero = row == 0 ? true : false
+                value.isHint = false
                 columObj.rowValues.append(value)
             }
             sudoku.unsolvedSudoku.append(columObj)

@@ -29,17 +29,19 @@ class DatabaseManager {
         do {
             try realm.write({
                 sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number = newValue
+                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].isZero = false
             })
         } catch {
             print(error.localizedDescription)
         }
     }
     
-    public func update(sudoku: Sudoku, newValue: Int, at indexPath: IndexPath, newColor: UIColor) {
+    public func updateForHint(sudoku: Sudoku, newValue: Int, at indexPath: IndexPath) {
         do {
             try realm.write({
                 sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number = newValue
-                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].textColor = newColor
+                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].isHint = true
+                sudoku.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].isZero = false
             })
         } catch {
             print(error.localizedDescription)

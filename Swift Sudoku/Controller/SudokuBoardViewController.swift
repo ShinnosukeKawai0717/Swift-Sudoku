@@ -157,6 +157,9 @@ class SudokuBoardViewController: UIViewController {
                     self.sudokuGridCollectionView.reloadItems(at: [selectedIndex])
                 }
             }
+            else {
+                print("cell has value")
+            }
         } else {
             print("cell is not selected")
         }
@@ -176,7 +179,7 @@ class SudokuBoardViewController: UIViewController {
         self.hintIndexPaths.append(ramdomIndexPath)
         let hint = solvedBoard.unsolvedSudoku[ramdomIndexPath.section].rowValues[ramdomIndexPath.row].number
         
-        databaseManager.update(sudoku: unsolvedBoard, newValue: hint, at: ramdomIndexPath, newColor: .systemRed)
+        databaseManager.updateForHint(sudoku: unsolvedBoard, newValue: hint, at: ramdomIndexPath)
         DispatchQueue.main.async {
             self.sudokuGridCollectionView.reloadItems(at: [ramdomIndexPath])
         }
@@ -230,22 +233,31 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SudokuCollectionViewCell.identifier, for: indexPath) as? SudokuCollectionViewCell else {
             fatalError()
         }
-        if hintIndexPaths.contains(indexPath) {
-            let hintNum = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number
-            let hintColor = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].textColor
-            cell.configureLabel(with: hintNum != 0 ? String(hintNum) : "", textColor: hintColor)
-            return cell
-        }
-        let number = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number
-        let color = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].textColor
-        cell.configureLabel(with: number != 0 ? String(number) : "", textColor: color)
-        
+//        if hintIndexPaths.contains(indexPath) {
+//            let hintNum = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number
+//            cell.configureLabel(with: hintNum != 0 ? String(hintNum) : "", textColor: .systemRed)
+//            return cell
+//        }
+//        let number = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number
+//        cell.configureLabel(with: number != 0 ? String(number) : "", textColor: .systemCyan)
         if selectedIndex != nil {
             DispatchQueue.main.async {
                 cell.contentView.backgroundColor = .secondaryLabel
             }
         }
-        return cell
+        let number = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].number
+        let isHint = self.unsolvedBoard.unsolvedSudoku[indexPath.section].rowValues[indexPath.row].isHint
+        
+        if isHint {
+            cell.configureLabel(with: number == 0 ? "" : String(number), textColor: .systemRed)
+            return cell
+        }
+        else {
+            cell.configureLabel(with: number == 0 ? "" : String(number), textColor: .systemCyan)
+            return cell
+        }
+        
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

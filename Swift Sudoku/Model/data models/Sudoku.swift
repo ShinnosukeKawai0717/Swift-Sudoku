@@ -11,23 +11,9 @@ import RealmSwift
 class Value: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted(originProperty: "rowValues") private var colum: LinkingObjects<Column>
-    
-    @Persisted private var value: Int = 0
-    public var isZero: Bool = false
-    public var textColor: UIColor = .systemCyan
-    
-    var number: Int {
-        get {
-            return value
-        }
-        set {
-            value = newValue
-        }
-    }
-    
-    override class func ignoredProperties() -> [String] {
-        return ["number", "isZero", "textColor"]
-    }
+    @Persisted var isHint: Bool = false
+    @Persisted var number: Int = 0
+    @Persisted var isZero: Bool = false
 }
 
 class Column: Object, ObjectKeyIdentifiable {
@@ -65,6 +51,7 @@ class Sudoku: Object, ObjectKeyIdentifiable, NSCopying {
                 let value = Value()
                 value.number = row.number
                 value.isZero = row.isZero
+                value.isHint = row.isHint
                 colums.rowValues.append(value)
             }
             copy.unsolvedSudoku.append(colums)
