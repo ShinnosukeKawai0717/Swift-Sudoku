@@ -7,12 +7,14 @@
 
 import UIKit
 import RealmSwift
+import ProgressHUD
 
 class MainViewController: UIViewController {
     
     private let sudokuVC = SudokuBoardViewController()
     private let keyBoardVC = KeyboardViewController()
     private let favoriteListVC = FavoriteListViewController()
+    private let tutorialVC = TutorialViewController()
     private let sudokuGridView = SudokuGridView()
     private let titles: [String] = ["Easy", "Medium", "Hard"]
     private let diffPickerView: UIPickerView = {
@@ -30,13 +32,12 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         keyBoardVC.delegate = self
+        sudokuVC.delegate = self
         diffPickerView.delegate = self
         diffPickerView.dataSource = self
         favoriteListVC.delegate = self
         AppUtility.lockOrientation(.portrait)
         view.backgroundColor = .systemBackground
-        
-        timerView.startTimer()
     }
     
     override func viewDidLayoutSubviews() {
@@ -67,15 +68,6 @@ class MainViewController: UIViewController {
         initNavigationItems()
     }
     
-    @objc func saveDidTap() {
-        let difficulty = self.title ?? "easy"
-        sudokuVC.saveFavorite(difficulty: difficulty)
-    }
-    
-    @objc func historyDidTap() {
-        navigationController?.pushViewController(favoriteListVC, animated: true)
-    }
-    
     private func initNavigationItems() {
         var configuration = UIImage.SymbolConfiguration(hierarchicalColor: .systemPink)
         let heart_fill = UIImage(systemName: "heart.fill", withConfiguration: configuration)
@@ -83,10 +75,27 @@ class MainViewController: UIViewController {
         configuration = UIImage.SymbolConfiguration(hierarchicalColor: .systemGray)
         let history = UIImage(systemName: "bookmark", withConfiguration: configuration)
         
+        let help = UIImage(systemName: "questionmark.circle", withConfiguration: configuration)
+        
         let saveItem = UIBarButtonItem(image: heart_fill, style: .plain, target: self, action: #selector(saveDidTap))
         let historyItem = UIBarButtonItem(image: history, style: .plain, target: self, action: #selector(historyDidTap))
-        
+        let helpItem = UIBarButtonItem(image: help, style: .plain, target: self, action: #selector(helpDidTap))
         self.navigationItem.rightBarButtonItems = [historyItem, saveItem]
+        self.navigationItem.leftBarButtonItem = helpItem
+    }
+    
+    @objc func saveDidTap() {
+        let difficulty = self.title ?? "easy"
+        sudokuVC.saveFavorite(difficulty: difficulty)
+        timerView.stopTimer()
+    }
+    
+    @objc func historyDidTap() {
+        navigationController?.pushViewController(favoriteListVC, animated: true)
+    }
+    
+    @objc func helpDidTap() {
+        navigationController?.pushViewControllerFromLeft(tutorialVC)
     }
     
     private func addConstraints() {
@@ -144,6 +153,21 @@ extension MainViewController: KeyboardViewControllerDelegate {
     }
 }
 
+extension MainViewController: SudokuBoardViewControllerDelegate {
+    func timerShouldStart() {
+        print("Timer starting....")
+        DispatchQueue.main.async {
+            print("Timer started")
+            self.timerView.startTimer()
+        }
+    }
+    func timerShouldRestart() {
+        DispatchQueue.main.async {
+            self.timerView.restart()
+        }
+    }
+}
+
 extension MainViewController: FavoriteListViewControllerDelegate {
     func favoriteListViewController(_ vc: FavoriteListViewController, didSelecte favorite: Sudoku, at indexPath: IndexPath) {
         self.sudokuVC.reloadBoard(with: favorite, and: indexPath)
@@ -166,9 +190,10 @@ extension MainViewController: UIPickerViewDataSource, UIPickerViewDelegate {
         let diff = String(row + 1)
         let title = titles[row]
         self.title = title
+        self.timerView.resetTimer()
+        ProgressHUD.show()
         DispatchQueue.global(qos: .userInitiated).async {
             self.sudokuVC.generateSudoku(with: diff)
         }
     }
-    
 }

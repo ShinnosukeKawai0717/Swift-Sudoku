@@ -9,12 +9,18 @@ import ProgressHUD
 import UIKit
 import RealmSwift
 
+protocol SudokuBoardViewControllerDelegate: AnyObject {
+    func timerShouldStart()
+    func timerShouldRestart()
+}
+
 class SudokuBoardViewController: UIViewController {
     
-    let toast = Toast(type: .info,
-                      message: "The problem has been solved",
-                      image: UIImage(systemName: "checkmark.circle.fill",
+    private let toast = Toast(type: .info,
+                              message: "The problem has been solved",
+                              image: UIImage(systemName: "checkmark.circle.fill",
                                      withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .systemGreen)))
+    weak var delegate: SudokuBoardViewControllerDelegate?
     private let sudokuManager = SudokuManager()
     private let databaseManager = DatabaseManager()
     private var hintIndexPaths: [IndexPath] = []
@@ -65,10 +71,17 @@ class SudokuBoardViewController: UIViewController {
         sudokuGridCollectionView.delegate = self
         sudokuGridCollectionView.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
-        DispatchQueue.global(qos: .background).async {
+        let queue = DispatchGroup()
+        queue.enter()
+        DispatchQueue.global(qos: .userInitiated).async {
             self.generateSudoku(with: "1")
+            queue.leave()
+        }
+        queue.notify(queue: .global(qos: .userInteractive)) {
+            self.delegate?.timerShouldStart()
         }
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         savedSudoku = databaseManager.retrive()
@@ -91,12 +104,9 @@ class SudokuBoardViewController: UIViewController {
     }
     
     public func generateSudoku(with diff: String) {
-        DispatchQueue.main.async {
-            ProgressHUD.colorAnimation = .systemGray
-            ProgressHUD.show()
-        }
         hintIndexPaths.removeAll()
         selectedIndex = nil
+        ProgressHUD.show()
         SudokuManager.shared.generate(diff: diff) { [weak self] result in
             guard let strongSelf = self else {
                 return
@@ -104,23 +114,20 @@ class SudokuBoardViewController: UIViewController {
             switch result {
             case .success(let unsolvedSudoku):
                 strongSelf.unsolvedBoard = unsolvedSudoku
-                ProgressHUD.showSuccess()
+                ProgressHUD.dismiss()
                 guard let copy = unsolvedSudoku.copy(with: nil) as? Sudoku else {
                     return
                 }
-                DispatchQueue.global(qos: .background).async {
-                    if let solvedOne = strongSelf.sudokuManager.solve(sudoku: copy) {
-                        strongSelf.solvedBoard = solvedOne
-                        
-                        DispatchQueue.main.async {
-                            let totastView = ToastView(toast: strongSelf.toast, frame: CGRect(x: 0, y: 0, width: strongSelf.view.frame.size.width/1.2, height: 60))
-                            totastView.show(on: strongSelf.sudokuGridCollectionView)
-                        }
+                if let solvedOne = strongSelf.sudokuManager.solve(sudoku: copy) {
+                    strongSelf.solvedBoard = solvedOne
+                    DispatchQueue.main.async {
+                        let totastView = ToastView(toast: strongSelf.toast, frame: CGRect(x: 0, y: 0, width: strongSelf.view.frame.size.width/1.2, height: 60))
+                        totastView.show(on: strongSelf.sudokuGridCollectionView)
                     }
                 }
             case .failure(let error):
                 print(error.localizedDescription)
-                ProgressHUD.showFailed("Something went wrong", interaction: false)
+                ProgressHUD.showFailed("Something went wrong", interaction: true)
             }
         }
     }
@@ -189,8 +196,13 @@ class SudokuBoardViewController: UIViewController {
             textFeild.keyboardType = .emailAddress
             textFeild.autocapitalizationType = .sentences
         }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let done = UIAlertAction(title: "Done", style: .default) { [weak self] action in
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] action in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.delegate?.timerShouldRestart()
+        }
+        let done = UIAlertAction(title: "Add", style: .default) { [weak self] action in
             guard let strongSelf = self else {
                 return
             }
@@ -198,6 +210,7 @@ class SudokuBoardViewController: UIViewController {
             strongSelf.unsolvedBoard.name = result ?? "My problem"
             strongSelf.unsolvedBoard.dateAdded = Date()
             strongSelf.databaseManager.save(newFavorite: strongSelf.unsolvedBoard)
+            strongSelf.delegate?.timerShouldRestart()
             strongSelf.databaseManager.printRealmURL()
         }
         
@@ -227,7 +240,7 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         
         if selectedIndex != nil {
             DispatchQueue.main.async {
-                cell.contentView.backgroundColor = .lightGray
+                cell.contentView.backgroundColor = .secondaryLabel
             }
         }
         return cell
@@ -237,9 +250,8 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         guard let cell = collectionView.cellForItem(at: indexPath) as? SudokuCollectionViewCell else {
             fatalError()
         }
-        collectionView.deselectItem(at: indexPath, animated: true)
         DispatchQueue.main.async {
-            cell.contentView.backgroundColor = .lightGray
+            cell.contentView.backgroundColor = .secondaryLabel
         }
         self.selectedIndex = indexPath
     }

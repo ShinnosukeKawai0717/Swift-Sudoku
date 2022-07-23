@@ -12,11 +12,14 @@ class TimerView: UIView {
     private let timerLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.text = "00 : 00"
         label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    private var shouldStop = false
+    private var timer = Timer()
     private var second: Int = 0
     private var minutes: Int = 0
     
@@ -24,11 +27,13 @@ class TimerView: UIView {
         super.init(frame: frame)
         addSubview(timerLabel)
     }
-    
     func startTimer() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
             guard let strongSelf = self else {
                 return
+            }
+            if strongSelf.shouldStop {
+                 timer.invalidate()
             }
             if strongSelf.second == 60  {
                 strongSelf.second = 0
@@ -37,12 +42,26 @@ class TimerView: UIView {
             let second_str = strongSelf.second < 10 ? "0\(strongSelf.second)" : "\(strongSelf.second)"
             let minu_str = strongSelf.minutes < 10 ? "0\(strongSelf.minutes)" : "\(strongSelf.minutes)"
             
-            DispatchQueue.main.async {
-                strongSelf.timerLabel.text = "\(minu_str) : \(second_str)"
-            }
+            strongSelf.timerLabel.text = "\(minu_str) : \(second_str)"
+            
             strongSelf.second += 1
+            
         }
+        
     }
+    
+    func stopTimer() {
+        self.shouldStop = true
+    }
+    func restart() {
+        self.shouldStop = false
+        self.startTimer()
+    }
+    func resetTimer() {
+        self.second = 0
+        self.minutes = 0
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         NSLayoutConstraint.activate([
