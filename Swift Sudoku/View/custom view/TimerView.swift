@@ -18,9 +18,9 @@ class TimerView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    private let mistakeLabel: UILabel = {
+    private lazy var mistakeLabel: UILabel = {
         let label = UILabel()
-        label.text = "0"
+        label.text = "Mistake: 0"
         label.textAlignment = .center
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 20)
@@ -41,13 +41,13 @@ class TimerView: UIView {
     func incrementMistake() {
         DispatchQueue.main.async {
             self.mistakeCount += 1
-            self.mistakeLabel.text = String(self.mistakeCount)
+            self.mistakeLabel.text = "Mistake: \(self.mistakeCount)"
         }
     }
     func resetMistakeCounter() {
         DispatchQueue.main.async {
             self.mistakeCount = 0
-            self.mistakeLabel.text = String(self.mistakeCount)
+            self.mistakeLabel.text = "Mistake: \(self.mistakeCount)"
         }
     }
     
