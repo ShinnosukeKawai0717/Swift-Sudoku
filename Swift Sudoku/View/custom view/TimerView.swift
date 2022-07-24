@@ -20,7 +20,7 @@ class TimerView: UIView {
     }()
     private lazy var mistakeLabel: UILabel = {
         let label = UILabel()
-        label.text = "Mistake: 0"
+        label.text = "Mistake: \(mistakeCount)"
         label.textAlignment = .center
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 18)
