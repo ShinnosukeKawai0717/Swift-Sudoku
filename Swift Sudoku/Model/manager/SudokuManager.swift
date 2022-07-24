@@ -79,8 +79,8 @@ class SudokuManager {
                     if self.solve(sudoku: sudoku) != nil {
                         return sudoku
                     }
+                    sudoku.board[emptyIndexPath.row].columns[emptyIndexPath.section].value = 0
                 }
-                sudoku.board[emptyIndexPath.row].columns[emptyIndexPath.section].value = 0
             }
             return nil
         }else {
