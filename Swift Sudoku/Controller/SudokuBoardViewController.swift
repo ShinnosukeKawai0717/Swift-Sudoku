@@ -12,6 +12,8 @@ import RealmSwift
 protocol SudokuBoardViewControllerDelegate: AnyObject {
     func timerShouldStart()
     func timerShouldRestart()
+    func didMakeMistake()
+    func resetMistakeCount()
 }
 
 class SudokuBoardViewController: UIViewController {
@@ -128,6 +130,7 @@ class SudokuBoardViewController: UIViewController {
                 ProgressHUD.showFailed("Something went wrong", interaction: true)
             }
         }
+        delegate?.resetMistakeCount()
     }
     
     public func reloadBoard(indexPath: IndexPath) {
@@ -150,8 +153,12 @@ class SudokuBoardViewController: UIViewController {
     }
     
     public func modifyBoard(with letter: String) {
+        let guess = Int(letter)!
         if let selectedIndex = selectedIndex {
             if self.unsolvedSudoku.board[selectedIndex.row].columns[selectedIndex.section].isZero {
+                if guess != self.solvedSudoku.board[selectedIndex.row].columns[selectedIndex.section].value {
+                    delegate?.didMakeMistake()
+                }
                 databaseManager.update(sudoku: self.unsolvedSudoku, newValue: Int(letter)!, at: selectedIndex)
                 DispatchQueue.main.async {
                     self.sudokuGridCollectionView.reloadItems(at: [selectedIndex])
@@ -240,18 +247,26 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         }
         if selectedIndex != nil {
             DispatchQueue.main.async {
-                cell.contentView.backgroundColor = .secondaryLabel
+                cell.contentView.backgroundColor = .secondaryLabel.withAlphaComponent(0.5)
             }
         }
         let number = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].value
         let isHint = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].isHint
         
         if isHint {
-            cell.configureLabel(with: number == 0 ? "" : String(number), textColor: .systemRed)
+            if number != 0 {
+                cell.configureLabel(with: String(number), textColor: .systemRed, backGroundColor: .secondarySystemBackground.withAlphaComponent(0.4))
+                return cell
+            }
+            cell.configureLabel(with: "", textColor: .systemRed, backGroundColor: .clear)
             return cell
         }
         else {
-            cell.configureLabel(with: number == 0 ? "" : String(number), textColor: .systemCyan)
+            if number != 0 {
+                cell.configureLabel(with: String(number), textColor: .systemCyan, backGroundColor: .secondarySystemBackground.withAlphaComponent(0.4))
+                return cell
+            }
+            cell.configureLabel(with: "", textColor: .systemCyan, backGroundColor: .clear)
             return cell
         }
     }
@@ -261,7 +276,7 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
             fatalError()
         }
         DispatchQueue.main.async {
-            cell.contentView.backgroundColor = .secondaryLabel
+            cell.contentView.backgroundColor = .secondaryLabel.withAlphaComponent(0.5)
         }
         self.selectedIndex = indexPath
     }

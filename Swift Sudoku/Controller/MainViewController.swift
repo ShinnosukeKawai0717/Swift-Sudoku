@@ -105,7 +105,7 @@ class MainViewController: UIViewController {
             timerView.topAnchor.constraint(equalTo: navigationController!.navigationBar.bottomAnchor),
             timerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
             timerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
-            timerView.heightAnchor.constraint(equalToConstant: view.frame.size.height/20),
+            timerView.heightAnchor.constraint(equalToConstant: 30),
         ])
         
         // add constraints to sudokuVC
@@ -166,6 +166,12 @@ extension MainViewController: SudokuBoardViewControllerDelegate {
         DispatchQueue.main.async {
             self.timerView.restart()
         }
+    }
+    func didMakeMistake() {
+        self.timerView.incrementMistake()
+    }
+    func resetMistakeCount() {
+        self.timerView.resetMistake()
     }
 }
 

@@ -22,8 +22,9 @@ class SudokuCollectionViewCell: UICollectionViewCell {
         self.backgroundColor = .clear
     }
     
-    public func configureLabel(with number: String, textColor: UIColor) {
+    public func configureLabel(with number: String, textColor: UIColor, backGroundColor: UIColor) {
         DispatchQueue.main.async {
+            self.cellLabel.backgroundColor = backGroundColor
             self.cellLabel.text = number
             self.cellLabel.textColor = textColor
         }
@@ -31,7 +32,7 @@ class SudokuCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.contentView.backgroundColor = nil
+        self.cellLabel.backgroundColor = nil
         self.cellLabel.text = nil
         self.cellLabel.textColor = nil
     }

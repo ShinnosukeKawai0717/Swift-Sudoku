@@ -18,15 +18,39 @@ class TimerView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    private let mistakeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "0"
+        label.textAlignment = .center
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     private var shouldStop = false
     private var timer = Timer()
     private var second: Int = 0
     private var minutes: Int = 0
+    private var mistakeCount: Int = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(timerLabel)
+        addSubview(mistakeLabel)
     }
+    func incrementMistake() {
+        DispatchQueue.main.async {
+            self.mistakeCount += 1
+            self.mistakeLabel.text = String(self.mistakeCount)
+        }
+    }
+    func resetMistake() {
+        DispatchQueue.main.async {
+            self.mistakeCount = 0
+            self.mistakeLabel.text = String(self.mistakeCount)
+        }
+    }
+    
     func startTimer() {
          Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
             guard let strongSelf = self else {
@@ -45,9 +69,7 @@ class TimerView: UIView {
             strongSelf.timerLabel.text = "\(minu_str) : \(second_str)"
             
             strongSelf.second += 1
-            
         }
-        
     }
     
     func stopTimer() {
@@ -65,6 +87,8 @@ class TimerView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         NSLayoutConstraint.activate([
+            mistakeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
+            mistakeLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             timerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             timerLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])
