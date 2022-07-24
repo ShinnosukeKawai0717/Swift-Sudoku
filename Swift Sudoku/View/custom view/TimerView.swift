@@ -20,7 +20,7 @@ class TimerView: UIView {
     }()
     private lazy var mistakeLabel: UILabel = {
         let label = UILabel()
-        label.text = "Mistake: \(mistakeCount)"
+        label.text = "Mistakes: \(mistakeCount)"
         label.textAlignment = .center
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 18)
@@ -41,13 +41,13 @@ class TimerView: UIView {
     func incrementMistake() {
         DispatchQueue.main.async {
             self.mistakeCount += 1
-            self.mistakeLabel.text = "Mistake: \(self.mistakeCount)"
+            self.mistakeLabel.text = "Mistakes: \(self.mistakeCount)"
         }
     }
     func resetMistakeCounter() {
         DispatchQueue.main.async {
             self.mistakeCount = 0
-            self.mistakeLabel.text = "Mistake: \(self.mistakeCount)"
+            self.mistakeLabel.text = "Mistakes: \(self.mistakeCount)"
         }
     }
     
