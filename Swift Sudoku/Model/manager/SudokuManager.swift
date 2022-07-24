@@ -42,7 +42,7 @@ class SudokuManager {
                     print("UnsolvedProblem is null")
                     return
                 }
-                strongSelf.generateTwoDArrOfNumber(unsolvedProblem: unsolvedProblem, diff: diff)
+                strongSelf.generateSudokuObject(unsolvedProblem: unsolvedProblem, diff: diff)
             } catch {
                 completion(.failure(error))
             }
@@ -51,19 +51,19 @@ class SudokuManager {
         dataTask.resume()
     }
     
-    fileprivate func generateTwoDArrOfNumber(unsolvedProblem: [[Int]], diff: String) {
+    fileprivate func generateSudokuObject(unsolvedProblem: [[Int]], diff: String) {
         let sudoku = Sudoku()
         sudoku.diff = diffDict[diff] ?? .easy
-        for colum in unsolvedProblem {
-            let columObj = Column()
-            for row in colum {
-                let value = Value()
-                value.number = row
-                value.isZero = row == 0 ? true : false
-                value.isHint = false
-                columObj.rowValues.append(value)
+        for rows in unsolvedProblem {
+            let rowObj = Row()
+            for colum in rows {
+                let colObj = Column()
+                colObj.value = colum
+                colObj.isZero = colum == 0 ? true : false
+                colObj.isHint = false
+                rowObj.columns.append(colObj)
             }
-            sudoku.board.append(columObj)
+            sudoku.board.append(rowObj)
         }
         guard let completion = completion else {
             return
@@ -72,29 +72,38 @@ class SudokuManager {
     }
     
     public func solve(sudoku: Sudoku) -> Sudoku? {
-        for colum in 0..<9 {
-            for row in 0..<9 {
-                if sudoku.board[colum].rowValues[row].number == 0 {
-                    for possibleNumber in 1...9 {
-                        if isValiedPlacement(board: sudoku, number: possibleNumber, row: row, colum: colum) {
-                            sudoku.board[colum].rowValues[row].number = possibleNumber
-                            let result = solve(sudoku: sudoku)
-                            if result != nil {
-                                return result
-                            }
-                            sudoku.board[colum].rowValues[row].number = 0
-                        }
+        if let emptyIndexPath = getEmptyIndex(sudoku: sudoku) {
+            for possibleNum in 1...9 {
+                if isValiedPlacement(board: sudoku, number: possibleNum, row: emptyIndexPath.row, colum: emptyIndexPath.section) {
+                    sudoku.board[emptyIndexPath.row].columns[emptyIndexPath.section].value = possibleNum
+                    if self.solve(sudoku: sudoku) != nil {
+                        return sudoku
                     }
-                    return nil
+                }
+                sudoku.board[emptyIndexPath.row].columns[emptyIndexPath.section].value = 0
+            }
+            return nil
+        }else {
+            return sudoku
+        }
+    }
+    
+    private func getEmptyIndex(sudoku: Sudoku) -> IndexPath? {
+        
+        for row in 0..<9 {
+            for colum in 0..<9 {
+                if sudoku.board[row].columns[colum].value == 0 {
+                    return IndexPath(row: row, section: colum)
                 }
             }
         }
-        return sudoku
+        
+        return nil
     }
     
     private func isNumberInRow(board: Sudoku, number: Int, row: Int) -> Bool {
         for i in 0..<9 {
-            if board.board[i].rowValues[row].number == number {
+            if board.board[row].columns[i].value == number {
                 return true
             }
         }
@@ -102,7 +111,7 @@ class SudokuManager {
     }
     private func isNumberInColum(board: Sudoku, number: Int, colum: Int) -> Bool {
         for i in 0..<9 {
-            if board.board[colum].rowValues[i].number == number {
+            if board.board[i].columns[colum].value == number {
                 return true
             }
         }
@@ -112,9 +121,9 @@ class SudokuManager {
     private func isNumberInSubBox(board: Sudoku, number: Int, colum: Int, row: Int) -> Bool {
         let localRow: Int = row - row % 3
         let localColum: Int = colum - colum % 3
-        for i in localColum..<localColum + 3 {
-            for j in localRow..<localRow + 3 {
-                if board.board[i].rowValues[j].number == number {
+        for i in localRow..<localRow + 3 {
+            for j in localColum..<localColum + 3 {
+                if board.board[i].columns[j].value == number {
                     return true
                 }
             }

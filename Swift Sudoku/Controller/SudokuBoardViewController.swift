@@ -148,7 +148,7 @@ class SudokuBoardViewController: UIViewController {
     
     public func modifyBoard(with letter: String) {
         if let selectedIndex = selectedIndex {
-            if self.unsolvedSudoku.board[selectedIndex.section].rowValues[selectedIndex.row].isZero {
+            if self.unsolvedSudoku.board[selectedIndex.row].columns[selectedIndex.section].isZero {
                 databaseManager.update(sudoku: self.unsolvedSudoku, newValue: Int(letter)!, at: selectedIndex)
                 DispatchQueue.main.async {
                     self.sudokuGridCollectionView.reloadItems(at: [selectedIndex])
@@ -167,13 +167,13 @@ class SudokuBoardViewController: UIViewController {
         var indePaths = Set<IndexPath>()
         for row in 0..<9 {
             for colum in 0..<9 {
-                if self.unsolvedSudoku.board[colum].rowValues[row].number == 0 {
+                if self.unsolvedSudoku.board[row].columns[colum].value == 0 {
                     indePaths.insert(IndexPath(row: row, section: colum))
                 }
             }
         }
         let ramdomIndexPath = indePaths.randomElement()!
-        let hint = solvedSudoku.board[ramdomIndexPath.section].rowValues[ramdomIndexPath.row].number
+        let hint = solvedSudoku.board[ramdomIndexPath.row].columns[ramdomIndexPath.section].value
         
         databaseManager.updateForHint(sudoku: unsolvedSudoku, newValue: hint, at: ramdomIndexPath)
         DispatchQueue.main.async {
@@ -220,7 +220,7 @@ class SudokuBoardViewController: UIViewController {
 
 extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.unsolvedSudoku.board[section].rowValues.count
+        return self.unsolvedSudoku.board[section].columns.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -232,8 +232,8 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
                 cell.contentView.backgroundColor = .secondaryLabel
             }
         }
-        let number = self.unsolvedSudoku.board[indexPath.section].rowValues[indexPath.row].number
-        let isHint = self.unsolvedSudoku.board[indexPath.section].rowValues[indexPath.row].isHint
+        let number = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].value
+        let isHint = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].isHint
         
         if isHint {
             cell.configureLabel(with: number == 0 ? "" : String(number), textColor: .systemRed)

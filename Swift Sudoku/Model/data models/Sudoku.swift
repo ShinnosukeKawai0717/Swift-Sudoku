@@ -8,19 +8,19 @@
 import Foundation
 import RealmSwift
 
-class Value: Object, ObjectKeyIdentifiable {
+class Column: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var id: ObjectId
-    @Persisted(originProperty: "rowValues") private var colum: LinkingObjects<Column>
+    @Persisted(originProperty: "columns") private var colum: LinkingObjects<Row>
     @Persisted var isHint: Bool = false
-    @Persisted var number: Int = 0
+    @Persisted var value: Int = 0
     @Persisted var isZero: Bool = false
 }
 
-class Column: Object, ObjectKeyIdentifiable {
+class Row: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted(originProperty: "board") private var sudoku: LinkingObjects<Sudoku>
     
-    @Persisted var rowValues = List<Value>()
+    @Persisted var columns = List<Column>()
 }
 
 class Sudoku: Object, ObjectKeyIdentifiable, NSCopying {
@@ -30,7 +30,7 @@ class Sudoku: Object, ObjectKeyIdentifiable, NSCopying {
     @Persisted var name: String = ""
     @Persisted var dateAdded: Date = Date()
     @Persisted private var difficulty = ""
-    @Persisted var board = List<Column>()
+    @Persisted var board = List<Row>()
     var diff: Difficulty {
         get {
             return Difficulty(rawValue: difficulty.lowercased()) ?? .easy
@@ -45,16 +45,16 @@ class Sudoku: Object, ObjectKeyIdentifiable, NSCopying {
         copy.name = name
         copy.dateAdded = dateAdded
         copy.diff = diff
-        for colum in board {
-            let colums = Column()
-            for row in colum.rowValues {
-                let value = Value()
-                value.number = row.number
-                value.isZero = row.isZero
-                value.isHint = row.isHint
-                colums.rowValues.append(value)
+        for rows in board {
+            let rowCopy = Row()
+            for column in rows.columns {
+                let columnObj = Column()
+                columnObj.value = column.value
+                columnObj.isZero = column.isZero
+                columnObj.isHint = column.isHint
+                rowCopy.columns.append(columnObj)
             }
-            copy.board.append(colums)
+            copy.board.append(rowCopy)
         }
         return copy
     }
