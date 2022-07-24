@@ -18,6 +18,14 @@ class KeyBoardCell: UICollectionViewCell {
         return label
     }()
     
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .systemBackground
@@ -25,19 +33,24 @@ class KeyBoardCell: UICollectionViewCell {
         contentView.addSubview(numLabel)
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        NSLayoutConstraint.activate([
-            numLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            numLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            numLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            numLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
-    }
-    
     func configure(with number: String) {
         DispatchQueue.main.async {
-            self.numLabel.text = number
+            if number == "Note" {
+                self.numLabel.removeFromSuperview()
+                self.contentView.addSubview(self.imageView)
+                NSLayoutConstraint.activate([
+                    self.imageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+                    self.imageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
+                ])
+                self.imageView.image = UIImage(systemName: "pencil")
+            }
+            else {
+                NSLayoutConstraint.activate([
+                    self.numLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+                    self.numLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
+                ])
+                self.numLabel.text = number
+            }
         }
     }
     
