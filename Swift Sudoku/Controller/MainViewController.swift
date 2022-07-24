@@ -148,6 +148,8 @@ extension MainViewController: KeyboardViewControllerDelegate {
             sudokuVC.solve()
         case "hint":
             sudokuVC.giveHint()
+        case "note":
+            break
         default:
             sudokuVC.modifyBoard(with: letter)
         }

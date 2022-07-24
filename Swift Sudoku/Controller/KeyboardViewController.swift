@@ -15,7 +15,7 @@ class KeyboardViewController: UIViewController {
     
     weak var delegate: KeyboardViewControllerDelegate?
     
-    private let keys = [["1", "2", "3", "4", "5"], ["6", "7", "8", "9"], ["Hint", "Ans"]]
+    private let keys = [["1", "2", "3", "4", "5"], ["6", "7", "8", "9"], ["Hint", "Ans", "Note"]]
     
     private let keyboardCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

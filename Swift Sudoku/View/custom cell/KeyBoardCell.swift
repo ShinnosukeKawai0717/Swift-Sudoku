@@ -22,11 +22,11 @@ class KeyBoardCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = .systemBackground
         layer.cornerRadius = layer.frame.size.height / 2
+        contentView.addSubview(numLabel)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.addSubview(numLabel)
         NSLayoutConstraint.activate([
             numLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             numLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
