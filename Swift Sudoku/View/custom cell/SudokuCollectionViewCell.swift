@@ -35,6 +35,7 @@ class SudokuCollectionViewCell: UICollectionViewCell {
         self.cellLabel.backgroundColor = nil
         self.cellLabel.text = nil
         self.cellLabel.textColor = nil
+        self.contentView.backgroundColor = nil
     }
     
     override func layoutSubviews() {
