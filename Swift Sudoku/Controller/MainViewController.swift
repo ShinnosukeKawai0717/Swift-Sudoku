@@ -171,7 +171,7 @@ extension MainViewController: SudokuBoardViewControllerDelegate {
         self.timerView.incrementMistake()
     }
     func resetMistakeCount() {
-        self.timerView.resetMistake()
+        self.timerView.resetMistakeCounter()
     }
 }
 

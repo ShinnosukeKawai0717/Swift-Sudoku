@@ -44,7 +44,7 @@ class TimerView: UIView {
             self.mistakeLabel.text = String(self.mistakeCount)
         }
     }
-    func resetMistake() {
+    func resetMistakeCounter() {
         DispatchQueue.main.async {
             self.mistakeCount = 0
             self.mistakeLabel.text = String(self.mistakeCount)
