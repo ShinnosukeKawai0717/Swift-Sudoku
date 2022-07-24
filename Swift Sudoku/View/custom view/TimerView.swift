@@ -23,7 +23,7 @@ class TimerView: UIView {
         label.text = "Mistake: 0"
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont.systemFont(ofSize: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -87,7 +87,7 @@ class TimerView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         NSLayoutConstraint.activate([
-            mistakeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
+            mistakeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             mistakeLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             timerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             timerLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
