@@ -132,10 +132,13 @@ class SudokuBoardViewController: UIViewController {
     
     public func reloadBoard(indexPath: IndexPath) {
         selectedIndex = nil
-        self.unsolvedSudoku = savedSudoku?[indexPath.row] ?? Sudoku()
-        let copy = self.unsolvedSudoku.copy(with: nil) as! Sudoku
+        guard let selectedSudoku = savedSudoku?[indexPath.row] else {
+            return
+        }
+        self.unsolvedSudoku = selectedSudoku
+        let unsolvedCopy = self.unsolvedSudoku.copy(with: nil) as! Sudoku
         DispatchQueue.global(qos: .background).async {
-            if let solvedBord = self.sudokuManager.solve(sudoku: copy) {
+            if let solvedBord = self.sudokuManager.solve(sudoku: unsolvedCopy) {
                 self.solvedSudoku = solvedBord
                 DispatchQueue.main.async {
                     let totastView = ToastView(toast: self.toast, frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width/1.2, height: 60))
@@ -183,7 +186,15 @@ class SudokuBoardViewController: UIViewController {
     
     public func solve() {
         selectedIndex = nil
-        self.unsolvedSudoku = solvedSudoku
+        guard let solvedCopy = solvedSudoku.copy(with: nil) as? Sudoku else {
+            return
+        }
+        for row in 0..<9 {
+            for column in 0..<9 {
+                solvedCopy.board[row].columns[column].isHint = unsolvedSudoku.board[row].columns[column].isHint
+            }
+        }
+        self.unsolvedSudoku = solvedCopy
     }
     
     public func saveFavorite(difficulty: String) {
