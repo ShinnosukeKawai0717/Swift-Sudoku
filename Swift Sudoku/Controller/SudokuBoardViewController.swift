@@ -18,6 +18,7 @@ protocol SudokuBoardViewControllerDelegate: AnyObject {
 
 class SudokuBoardViewController: UIViewController {
     
+    private var canEditNote = false
     private let toast = Toast(type: .info,
                               message: "The problem has been solved",
                               image: UIImage(systemName: "checkmark.circle.fill",
@@ -45,7 +46,7 @@ class SudokuBoardViewController: UIViewController {
         }
         didSet {
             DispatchQueue.main.async {
-                guard let formerSelectedCell = self.sudokuGridCollectionView.cellForItem(at: oldValue ?? IndexPath()) as? SudokuCollectionViewCell else {
+                guard let formerSelectedCell = self.sudokuGridCollectionView.cellForItem(at: oldValue ?? IndexPath()) as? SudokuViewCell else {
                     return
                 }
                 formerSelectedCell.contentView.backgroundColor = .clear
@@ -61,7 +62,7 @@ class SudokuBoardViewController: UIViewController {
         collectionview.translatesAutoresizingMaskIntoConstraints = false
         collectionview.allowsMultipleSelection = false
         collectionview.allowsSelection = true
-        collectionview.register(SudokuCollectionViewCell.self, forCellWithReuseIdentifier: SudokuCollectionViewCell.identifier)
+        collectionview.register(SudokuViewCell.self, forCellWithReuseIdentifier: SudokuViewCell.identifier)
         collectionview.backgroundColor = .clear
         return collectionview
     }()
@@ -172,6 +173,28 @@ class SudokuBoardViewController: UIViewController {
         }
     }
     
+    public func activateNote() {
+        canEditNote = !canEditNote
+        if canEditNote {
+            print("Note activated")
+        }
+        else {
+            print("Note deactivated")
+        }
+    }
+    
+    public func modifyNote(with letter: String) {
+        guard let selectedIndex = selectedIndex else {
+            print("Cell is not selected")
+            return
+        }
+        DispatchQueue.main.async {
+            if let cell = self.sudokuGridCollectionView.cellForItem(at: selectedIndex) as? SudokuViewCell {
+                cell.showNoteView(for: letter)
+            }
+        }
+    }
+    
     public func giveHint() {
         selectedIndex = nil
         var indePaths = Set<IndexPath>()
@@ -242,12 +265,13 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SudokuCollectionViewCell.identifier, for: indexPath) as? SudokuCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SudokuViewCell.identifier, for: indexPath) as? SudokuViewCell else {
             fatalError()
         }
+        cell.hideNoteView()
         if selectedIndex != nil {
             DispatchQueue.main.async {
-                cell.contentView.backgroundColor = .secondaryLabel.withAlphaComponent(0.5)
+                cell.contentView.backgroundColor = .secondaryLabel.withAlphaComponent(0.6)
             }
         }
         let number = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].value
@@ -272,7 +296,7 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? SudokuCollectionViewCell else {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SudokuViewCell else {
             fatalError()
         }
         DispatchQueue.main.async {
@@ -281,7 +305,7 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         self.selectedIndex = indexPath
     }
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? SudokuCollectionViewCell else {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SudokuViewCell else {
             return
         }
         print(cell)

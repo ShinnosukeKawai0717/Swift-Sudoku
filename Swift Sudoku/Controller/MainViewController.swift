@@ -11,8 +11,9 @@ import ProgressHUD
 
 class MainViewController: UIViewController {
     
+    private var isNoteTapped = false
+    private var isNoteActive = false
     private let sudokuVC = SudokuBoardViewController()
-    private let integer = 123123
     private let keyBoardVC = KeyboardViewController()
     private let favoriteListVC = FavoriteListViewController()
     private let tutorialVC = TutorialViewController()
@@ -143,15 +144,22 @@ class MainViewController: UIViewController {
 
 extension MainViewController: KeyboardViewControllerDelegate {
     func keyboardViewController(_ vc: KeyboardViewController, didTapKey letter: String) {
-        switch letter.lowercased() {
-        case "ans":
-            sudokuVC.solve()
-        case "hint":
-            sudokuVC.giveHint()
-        case "note":
-            break
-        default:
-            sudokuVC.modifyBoard(with: letter)
+        if letter == "Note" {
+            isNoteActive = !isNoteActive
+            sudokuVC.activateNote()
+        }
+        else if isNoteActive {
+            sudokuVC.modifyNote(with: letter)
+        }
+        else {
+            switch letter.lowercased() {
+            case "ans":
+                sudokuVC.solve()
+            case "hint":
+                sudokuVC.giveHint()
+            default:
+                sudokuVC.modifyBoard(with: letter)
+            }
         }
     }
 }
