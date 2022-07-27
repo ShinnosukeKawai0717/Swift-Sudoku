@@ -24,18 +24,10 @@ class NoteView: UIView {
     }
     
     private let indexDict = [
-        "1" : IndexPath(row: 0, section: 0),
-        "2" : IndexPath(row: 0, section: 1),
-        "3" : IndexPath(row: 0, section: 2),
-        "4" : IndexPath(row: 1, section: 0),
-        "5" : IndexPath(row: 1, section: 1),
-        "6" : IndexPath(row: 1, section: 2),
-        "7" : IndexPath(row: 2, section: 0),
-        "8" : IndexPath(row: 2, section: 1),
-        "9" : IndexPath(row: 2, section: 2)
+        "1" : IndexPath(row: 0, section: 0), "2" : IndexPath(row: 0, section: 1), "3" : IndexPath(row: 0, section: 2),
+        "4" : IndexPath(row: 1, section: 0), "5" : IndexPath(row: 1, section: 1), "6" : IndexPath(row: 1, section: 2),
+        "7" : IndexPath(row: 2, section: 0), "8" : IndexPath(row: 2, section: 1), "9" : IndexPath(row: 2, section: 2)
     ]
-    
-    var shouldActive = false
     
     private let noteView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
