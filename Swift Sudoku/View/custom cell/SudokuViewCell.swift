@@ -37,18 +37,23 @@ class SudokuViewCell: UICollectionViewCell {
         self.cellLabel.backgroundColor = nil
         self.cellLabel.text = nil
         self.cellLabel.textColor = nil
-        selectedBackgroundView = nil
+        self.selectedBackgroundView = nil
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         NSLayoutConstraint.activate([
-            cellLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cellLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            cellLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            cellLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            cellLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            cellLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            cellLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            cellLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4)
         ])
-        
+        self.selectedBackgroundView = {
+            let view = UIView()
+            view.frame.size = CGSize(width: contentView.frame.size.width-20, height: contentView.frame.size.height-20)
+            view.backgroundColor = .systemGray.withAlphaComponent(0.5)
+            return view
+        }()
     }
     
     required init?(coder: NSCoder) {
