@@ -88,7 +88,6 @@ class SudokuManager {
     }
     
     private func getEmptyIndex(sudoku: Sudoku) -> IndexPath? {
-        
         for row in 0..<9 {
             for colum in 0..<9 {
                 if sudoku.board[row].columns[colum].value == 0 {

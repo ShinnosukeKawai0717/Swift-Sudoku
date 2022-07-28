@@ -50,7 +50,9 @@ class DatabaseManager {
     public func updateNote(sudoku: Sudoku, newNote: String, at indexPath: IndexPath) {
         do {
             try realm.write({
-                sudoku.board[indexPath.row].columns[indexPath.section].notes
+                if !sudoku.board[indexPath.row].columns[indexPath.section].notes.contains(newNote) {
+                    sudoku.board[indexPath.row].columns[indexPath.section].notes.append(newNote)
+                }
             })
         } catch {
             print(error.localizedDescription)

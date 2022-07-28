@@ -32,7 +32,6 @@
 		7DAB5E02288ABD10006FA9CD /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DFE288ABD0F006FA9CD /* KeyboardViewController.swift */; };
 		7DAB5E03288ABD10006FA9CD /* SudokuBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DFF288ABD10006FA9CD /* SudokuBoardViewController.swift */; };
 		7DBAA5F42890224F00E1AF35 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBAA5F32890224F00E1AF35 /* NoteCell.swift */; };
-		7DBAA5F62890AE3D00E1AF35 /* NumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBAA5F52890AE3D00E1AF35 /* NumCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,7 +62,6 @@
 		7DAB5DFE288ABD0F006FA9CD /* KeyboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		7DAB5DFF288ABD10006FA9CD /* SudokuBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SudokuBoardViewController.swift; sourceTree = "<group>"; };
 		7DBAA5F32890224F00E1AF35 /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
-		7DBAA5F52890AE3D00E1AF35 /* NumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumCell.swift; sourceTree = "<group>"; };
 		E3428ABF9BC9A0E4ADD63B02 /* Pods_Swift_Sudoku.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swift_Sudoku.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F99500311BAD5DED229CF7D7 /* Pods-Swift Sudoku.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swift Sudoku.debug.xcconfig"; path = "Target Support Files/Pods-Swift Sudoku/Pods-Swift Sudoku.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -148,7 +146,6 @@
 				7DAB5DF2288ABCE8006FA9CD /* KeyBoardCell.swift */,
 				7DAB5DF0288ABCE8006FA9CD /* SudokuViewCell.swift */,
 				7DBAA5F32890224F00E1AF35 /* NoteCell.swift */,
-				7DBAA5F52890AE3D00E1AF35 /* NumCell.swift */,
 			);
 			path = "custom cell";
 			sourceTree = "<group>";
@@ -327,7 +324,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DBAA5F62890AE3D00E1AF35 /* NumCell.swift in Sources */,
 				7DAB5DFB288ABCFE006FA9CD /* TimerView.swift in Sources */,
 				7DAB5DD1288ABB7F006FA9CD /* AppDelegate.swift in Sources */,
 				7DAB5DF5288ABCE8006FA9CD /* KeyBoardCell.swift in Sources */,

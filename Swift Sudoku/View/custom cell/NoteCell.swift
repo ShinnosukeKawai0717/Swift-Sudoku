@@ -10,89 +10,105 @@ import UIKit
 class NoteCell: UICollectionViewCell {
     
     static let identifier = "NoteCell"
+    private var dataSource = Array(repeating: "", count: 9)
+    private var numLabels = [UILabel]()
     
-    private var datasource: [[String]] = Array(repeating: Array(repeating: "", count: 3), count: 3)
+    private let mainStackView: UIStackView = {
+        let view = UIStackView()
+        view.distribution = .fillEqually
+        view.axis = .vertical
+        view.alignment = .fill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
-    static let indexDict = [
-        "1" : IndexPath(row: 0, section: 0), "2" : IndexPath(row: 0, section: 1), "3" : IndexPath(row: 0, section: 2),
-        "4" : IndexPath(row: 1, section: 0), "5" : IndexPath(row: 1, section: 1), "6" : IndexPath(row: 1, section: 2),
-        "7" : IndexPath(row: 2, section: 0), "8" : IndexPath(row: 2, section: 1), "9" : IndexPath(row: 2, section: 2)
-    ]
-    
-    private let noteCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .clear
-        collectionView.register(NumCell.self, forCellWithReuseIdentifier: NumCell.identifier)
-        return collectionView
+    private let firstStackView: UIStackView = {
+        let view = UIStackView()
+        view.alignment = .center
+        view.distribution = .fillEqually
+        view.axis = .horizontal
+        return view
+    }()
+    private let secondStackView: UIStackView = {
+        let view = UIStackView()
+        view.distribution = .fillEqually
+        view.axis = .horizontal
+        view.alignment = .center
+        return view
+    }()
+    private let thirdStackView: UIStackView = {
+        let view = UIStackView()
+        view.distribution = .fillEqually
+        view.axis = .horizontal
+        view.alignment = .center
+        return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        noteCollectionView.delegate = self
-        noteCollectionView.dataSource = self
+        setUpNumLabels()
+        setUpStackViews()
     }
     
-    func configure(note: [[String]]) {
-        DispatchQueue.main.async {
-            self.datasource = note
-            self.noteCollectionView.reloadData()
+    func configure(with notes: [String]) {
+        for note in notes {
+            if let index = Int(note) {
+                DispatchQueue.main.async {
+                    self.numLabels[index-1].text = note
+                }
+            }
         }
-        datasource.removeAll()
-        datasource = Array(repeating: Array(repeating: "", count: 3), count: 3)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        contentView.backgroundColor = nil
+        selectedBackgroundView = nil
+        for numLabel in numLabels {
+            numLabel.text = nil
+        }
+    }
+    
+    private func setUpNumLabels() {
+        for _ in 0..<9 {
+            let label = UILabel()
+            label.numberOfLines = 0
+            label.textAlignment = .center
+            label.textColor = .systemGray
+            label.font = UIFont.systemFont(ofSize: 12)
+            numLabels.append(label)
+        }
+    }
+    private func setUpStackViews() {
+        for i in 0..<numLabels.count/3 {
+            firstStackView.addArrangedSubview(numLabels[i])
+        }
+        for i in numLabels.count/3..<(numLabels.count/3)+3 {
+            secondStackView.addArrangedSubview(numLabels[i])
+        }
+        for i in (numLabels.count/3)+3..<numLabels.count {
+            thirdStackView.addArrangedSubview(numLabels[i])
+        }
+        mainStackView.addArrangedSubview(firstStackView)
+        mainStackView.addArrangedSubview(secondStackView)
+        mainStackView.addArrangedSubview(thirdStackView)
+        contentView.addSubview(mainStackView)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.addSubview(noteCollectionView)
+        addConstrainsToSVs()
+    }
+    
+    private func addConstrainsToSVs() {
         NSLayoutConstraint.activate([
-            noteCollectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            noteCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            noteCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            noteCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+            mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
+            mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
         ])
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension NoteCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.datasource[section].count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NumCell.identifier, for: indexPath) as? NumCell else {
-            fatalError()
-        }
-        print(datasource[indexPath.section][indexPath.row])
-        cell.configure(text: datasource[indexPath.section][indexPath.row])
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        var top: CGFloat = 0
-        if section == 0 {
-            top = (contentView.frame.height - ((contentView.frame.size.width/4)*3)) / 2
-        }
-        return UIEdgeInsets(top: top, left: 0, bottom: 0, right: 0)
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.datasource.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.contentView.frame.size.width/4, height: self.contentView.frame.size.width/4)
     }
 }
