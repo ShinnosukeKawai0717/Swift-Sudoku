@@ -50,8 +50,8 @@ class SudokuViewCell: UICollectionViewCell {
         ])
         self.selectedBackgroundView = {
             let view = UIView()
-            view.frame.size = CGSize(width: contentView.frame.size.width-20, height: contentView.frame.size.height-20)
-            view.backgroundColor = .systemGray.withAlphaComponent(0.5)
+            view.frame = bounds
+            view.backgroundColor = .systemGray.withAlphaComponent(0.3)
             return view
         }()
     }
