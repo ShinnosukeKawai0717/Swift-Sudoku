@@ -47,7 +47,6 @@ class SudokuManager {
                 completion(.failure(error))
             }
         })
-
         dataTask.resume()
     }
     

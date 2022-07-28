@@ -101,7 +101,6 @@ class MainViewController: UIViewController {
     }
     
     private func addConstraints() {
-        
         NSLayoutConstraint.activate([
             timerView.topAnchor.constraint(equalTo: navigationController!.navigationBar.bottomAnchor),
             timerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),

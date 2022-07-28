@@ -8,12 +8,14 @@
 import Foundation
 import RealmSwift
 
+
 class Column: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted(originProperty: "columns") private var colum: LinkingObjects<Row>
-    @Persisted var isHint: Bool = false
     @Persisted var value: Int = 0
+    @Persisted var isHint: Bool = false
     @Persisted var isZero: Bool = false
+    @Persisted var notes = List<String>()
 }
 
 class Row: Object, ObjectKeyIdentifiable {
@@ -52,13 +54,13 @@ class Sudoku: Object, ObjectKeyIdentifiable, NSCopying {
                 columnObj.value = column.value
                 columnObj.isZero = column.isZero
                 columnObj.isHint = column.isHint
+                columnObj.notes = column.notes
                 rowCopy.columns.append(columnObj)
             }
             copy.board.append(rowCopy)
         }
         return copy
     }
-    
 }
 
 enum Difficulty: String {

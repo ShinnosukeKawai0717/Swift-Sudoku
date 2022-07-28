@@ -18,6 +18,8 @@ protocol SudokuBoardViewControllerDelegate: AnyObject {
 
 class SudokuBoardViewController: UIViewController {
     
+    private var newNote = ""
+    private var noteDataSource = Array(repeating: Array(repeating: "", count: 3), count: 3)
     private var canEditNote = false
     private let toast = Toast(type: .info,
                               message: "The problem has been solved",
@@ -46,10 +48,12 @@ class SudokuBoardViewController: UIViewController {
         }
         didSet {
             DispatchQueue.main.async {
-                guard let formerSelectedCell = self.sudokuGridCollectionView.cellForItem(at: oldValue ?? IndexPath()) as? SudokuViewCell else {
-                    return
+                if let sudokuCell = self.sudokuGridCollectionView.cellForItem(at: oldValue ?? IndexPath()) as? SudokuViewCell {
+                    sudokuCell.contentView.backgroundColor = .clear
                 }
-                formerSelectedCell.contentView.backgroundColor = .clear
+                if let noteCell = self.sudokuGridCollectionView.cellForItem(at: oldValue ?? IndexPath()) as? NoteCell {
+                    noteCell.contentView.backgroundColor = .clear
+                }
             }
         }
     }
@@ -183,20 +187,15 @@ class SudokuBoardViewController: UIViewController {
             print("Note deactivated")
         }
     }
-    private var newValue = ""
+    
     public func modifyNote(with letter: String) {
         guard let selectedIndex = selectedIndex else {
             print("Cell is not selected")
             return
         }
         DispatchQueue.main.async {
-//            if let noteCell = self.sudokuGridCollectionView.cellForItem(at: selectedIndex) as? NoteCell{
-            self.newValue = letter
+            self.newNote = letter
             self.sudokuGridCollectionView.reloadItems(at: [selectedIndex])
-//            }
-//            else {
-//                print("Failed to get noteCell")
-//            }
         }
     }
     
@@ -270,61 +269,56 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SudokuViewCell.identifier, for: indexPath) as? SudokuViewCell else {
-            fatalError()
-        }
-        guard let noteCell = collectionView.dequeueReusableCell(withReuseIdentifier: NoteCell.identifier, for: indexPath) as? NoteCell else {
-            fatalError()
-        }
-        if selectedIndex != nil {
-            DispatchQueue.main.async {
-                cell.contentView.backgroundColor = .secondaryLabel.withAlphaComponent(0.6)
-            }
-        }
+        
         if canEditNote {
-            noteCell.configure(note: newValue)
+            let noteCell = collectionView.dequeueReusableCell(withReuseIdentifier: NoteCell.identifier, for: indexPath) as! NoteCell
+            print(noteCell)
+            if selectedIndex != nil {
+                noteCell.contentView.backgroundColor = .systemGray.withAlphaComponent(0.6)
+            }
+            print("can edit note")
+            if let noteIndex = NoteCell.indexDict[newNote] {
+                if noteDataSource[noteIndex.row][noteIndex.section] != newNote {
+                    noteDataSource[noteIndex.row][noteIndex.section] = newNote
+                }else {
+                    noteDataSource[noteIndex.row][noteIndex.section] = ""
+                }
+                noteCell.configure(note: noteDataSource)
+            }
             return noteCell
         }
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SudokuViewCell.identifier, for: indexPath) as! SudokuViewCell
+        if selectedIndex != nil {
+            cell.contentView.backgroundColor = .systemGray.withAlphaComponent(0.6)
+        }
+        let number = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].value
+        let isHint = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].isHint
+        
+        if isHint {
+            if number != 0 {
+                cell.configureLabel(with: String(number), textColor: .systemRed, backGroundColor: .secondarySystemBackground.withAlphaComponent(0.4))
+                return cell
+            }
+            cell.configureLabel(with: "", textColor: .systemRed, backGroundColor: .clear)
+            return cell
+        }
         else {
-            let number = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].value
-            let isHint = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].isHint
-            
-            if isHint {
-                if number != 0 {
-                    cell.configureLabel(with: String(number), textColor: .systemRed, backGroundColor: .secondarySystemBackground.withAlphaComponent(0.4))
-                    return cell
-                }
-                cell.configureLabel(with: "", textColor: .systemRed, backGroundColor: .clear)
+            if number != 0 {
+                cell.configureLabel(with: String(number), textColor: .systemCyan, backGroundColor: .secondarySystemBackground.withAlphaComponent(0.4))
                 return cell
             }
-            else {
-                if number != 0 {
-                    cell.configureLabel(with: String(number), textColor: .systemCyan, backGroundColor: .secondarySystemBackground.withAlphaComponent(0.4))
-                    return cell
-                }
-                cell.configureLabel(with: "", textColor: .systemCyan, backGroundColor: .clear)
-                return cell
-            }
-
+            cell.configureLabel(with: "", textColor: .systemCyan, backGroundColor: .clear)
+            return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? SudokuViewCell {
-            DispatchQueue.main.async {
-                cell.contentView.backgroundColor = .secondaryLabel.withAlphaComponent(0.6)
-            }
-            self.selectedIndex = indexPath
-            return
-        }
-        guard let noteCell = collectionView.cellForItem(at: indexPath) as? NoteCell else {
-            return
-        }
-        DispatchQueue.main.async {
-            noteCell.contentView.backgroundColor = .secondaryLabel.withAlphaComponent(0.6)
-        }
+        self.newNote = ""
+        self.noteDataSource.removeAll()
+        self.noteDataSource = Array(repeating: Array(repeating: "", count: 3), count: 3)
+        print(self.noteDataSource)
         self.selectedIndex = indexPath
-        return
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

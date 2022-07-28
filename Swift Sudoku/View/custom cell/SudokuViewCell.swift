@@ -18,17 +18,9 @@ class SudokuViewCell: UICollectionViewCell {
         return label
     }()
     
-//    private let noteView: NoteView = {
-//        let view = NoteView()
-//        view.backgroundColor = .clear
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        return view
-//    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .clear
-//        contentView.addSubview(noteView)
         contentView.addSubview(cellLabel)
     }
     
@@ -40,28 +32,6 @@ class SudokuViewCell: UICollectionViewCell {
         }
     }
     
-    public func showNoteView() {
-//        DispatchQueue.main.async {
-//            self.contentView.addSubview(self.noteView)
-//            NSLayoutConstraint.activate([
-//                self.noteView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
-//                self.noteView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-//                self.noteView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-//                self.noteView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
-//            ])
-//        }
-    }
-    
-    public func configureNote(with number: String) {
-//        noteView.configure(with: number)
-    }
-    
-    public func hideNoteView() {
-//        DispatchQueue.main.async {
-//            self.noteView.removeFromSuperview()
-//            self.contentView.addSubview(self.cellLabel)
-//        }
-    }
     override func prepareForReuse() {
         super.prepareForReuse()
         self.cellLabel.backgroundColor = nil

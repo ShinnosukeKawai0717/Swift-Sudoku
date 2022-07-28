@@ -47,6 +47,16 @@ class DatabaseManager {
         }
     }
     
+    public func updateNote(sudoku: Sudoku, newNote: String, at indexPath: IndexPath) {
+        do {
+            try realm.write({
+                sudoku.board[indexPath.row].columns[indexPath.section].notes
+            })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     public func delete(favorite: Sudoku) {
         do {
             try realm.write({
