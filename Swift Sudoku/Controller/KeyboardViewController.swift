@@ -88,6 +88,20 @@ extension KeyboardViewController: UICollectionViewDelegateFlowLayout, UICollecti
         collectionView.deselectItem(at: indexPath, animated: true)
         
         let tappedKey = keys[indexPath.section][indexPath.row]
+        
         delegate?.keyboardViewController(self, didTapKey: tappedKey)
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
+        return true
     }
 }

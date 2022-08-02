@@ -67,14 +67,8 @@ class SudokuBoardViewController: UIViewController {
         sudokuGridCollectionView.delegate = self
         sudokuGridCollectionView.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
-        let queue = DispatchGroup()
-        queue.enter()
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.generateSudoku(with: "1")
-            queue.leave()
-        }
-        queue.notify(queue: .global(qos: .userInteractive)) {
-            self.delegate?.timerShouldStart()
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            self?.generateSudoku(with: "1")
         }
     }
     
@@ -110,6 +104,7 @@ class SudokuBoardViewController: UIViewController {
             case .success(let unsolvedSudoku):
                 strongSelf.unsolvedSudoku = unsolvedSudoku
                 ProgressHUD.dismiss()
+                strongSelf.delegate?.timerShouldStart()
                 guard let copy = unsolvedSudoku.copy(with: nil) as? Sudoku else {
                     return
                 }
@@ -170,10 +165,10 @@ class SudokuBoardViewController: UIViewController {
     public func activateNote() {
         canEditNote = !canEditNote
         if canEditNote {
-            print("Note activated")
+            
         }
         else {
-            print("Note deactivated")
+        
         }
     }
     
@@ -274,7 +269,6 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         }
         
         let sudokuCell = collectionView.dequeueReusableCell(withReuseIdentifier: SudokuViewCell.identifier, for: indexPath) as! SudokuViewCell
-        
         let number = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].value
         let isHint = self.unsolvedSudoku.board[indexPath.row].columns[indexPath.section].isHint
         if isHint {
@@ -323,7 +317,6 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        print("didDeselectItemAt")
         DispatchQueue.main.async {
             guard let selectedIndexs = collectionView.indexPathsForSelectedItems else {
                 return

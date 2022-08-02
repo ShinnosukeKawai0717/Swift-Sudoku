@@ -22,21 +22,21 @@ class NoteCell: UICollectionViewCell {
         return view
     }()
     
-    private let firstStackView: UIStackView = {
+    private let topSView: UIStackView = {
         let view = UIStackView()
         view.alignment = .center
         view.distribution = .fillEqually
         view.axis = .horizontal
         return view
     }()
-    private let secondStackView: UIStackView = {
+    private let middleSView: UIStackView = {
         let view = UIStackView()
         view.distribution = .fillEqually
         view.axis = .horizontal
         view.alignment = .center
         return view
     }()
-    private let thirdStackView: UIStackView = {
+    private let bottomSView: UIStackView = {
         let view = UIStackView()
         view.distribution = .fillEqually
         view.axis = .horizontal
@@ -80,17 +80,17 @@ class NoteCell: UICollectionViewCell {
     }
     private func setUpStackViews() {
         for i in 0..<numLabels.count/3 {
-            firstStackView.addArrangedSubview(numLabels[i])
+            topSView.addArrangedSubview(numLabels[i])
         }
         for i in numLabels.count/3..<(numLabels.count/3)+3 {
-            secondStackView.addArrangedSubview(numLabels[i])
+            middleSView.addArrangedSubview(numLabels[i])
         }
         for i in (numLabels.count/3)+3..<numLabels.count {
-            thirdStackView.addArrangedSubview(numLabels[i])
+            bottomSView.addArrangedSubview(numLabels[i])
         }
-        mainStackView.addArrangedSubview(firstStackView)
-        mainStackView.addArrangedSubview(secondStackView)
-        mainStackView.addArrangedSubview(thirdStackView)
+        mainStackView.addArrangedSubview(topSView)
+        mainStackView.addArrangedSubview(middleSView)
+        mainStackView.addArrangedSubview(bottomSView)
         contentView.addSubview(mainStackView)
     }
     
@@ -106,6 +106,12 @@ class NoteCell: UICollectionViewCell {
             mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
         ])
+        self.selectedBackgroundView = {
+            let view = UIView()
+            view.frame = bounds
+            view.backgroundColor = .systemGray.withAlphaComponent(0.3)
+            return view
+        }()
     }
     
     required init?(coder: NSCoder) {

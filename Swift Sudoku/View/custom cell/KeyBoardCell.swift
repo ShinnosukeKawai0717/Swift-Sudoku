@@ -54,6 +54,12 @@ class KeyBoardCell: UICollectionViewCell {
         }
     }
     
+    func changeNoteImage(with image: UIImage) {
+        DispatchQueue.main.async {
+            self.imageView.image = image
+        }
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         self.numLabel.text = nil
@@ -61,16 +67,5 @@ class KeyBoardCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError()
-    }
-    
-    override var isSelected: Bool{
-        willSet{
-            super.isSelected = newValue
-            if newValue {
-                self.backgroundColor = .systemGray
-            }else {
-                self.backgroundColor = .systemBackground
-            }
-        }
     }
 }
