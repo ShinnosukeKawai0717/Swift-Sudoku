@@ -11,7 +11,6 @@ import ProgressHUD
 
 class MainViewController: UIViewController {
     
-    private var isNoteTapped = false
     private var isNoteActive = false
     private let sudokuVC = SudokuBoardViewController()
     private let keyBoardVC = KeyboardViewController()

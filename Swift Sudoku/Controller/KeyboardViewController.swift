@@ -17,6 +17,14 @@ class KeyboardViewController: UIViewController {
     
     private let keys = [["1", "2", "3", "4", "5"], ["6", "7", "8", "9"], ["Hint", "Ans", "Note"]]
     
+    private var isNoteActive = false {
+        didSet {
+            DispatchQueue.main.async {
+                self.keyboardCollectionView.reloadItems(at: [IndexPath(row: 2, section: 2)])
+            }
+        }
+    }
+    
     private let keyboardCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 2
@@ -56,7 +64,17 @@ extension KeyboardViewController: UICollectionViewDelegateFlowLayout, UICollecti
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KeyBoardCell.identifier, for: indexPath) as? KeyBoardCell else {
             fatalError()
         }
-        cell.configure(with: keys[indexPath.section][indexPath.row])
+        let key = keys[indexPath.section][indexPath.row]
+        if key == "Note" {
+            if isNoteActive {
+                cell.changeNoteImage(with: "pencil")
+                return cell
+            }
+            cell.changeNoteImage(with: "pencil.slash")
+            return cell
+        }
+                
+        cell.configure(with: key)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -86,12 +104,12 @@ extension KeyboardViewController: UICollectionViewDelegateFlowLayout, UICollecti
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        
         let tappedKey = keys[indexPath.section][indexPath.row]
-        
+        if tappedKey == "Note" {
+            isNoteActive = !isNoteActive
+        }
         delegate?.keyboardViewController(self, didTapKey: tappedKey)
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         return true

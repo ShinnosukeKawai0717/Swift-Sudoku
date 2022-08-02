@@ -35,37 +35,44 @@ class KeyBoardCell: UICollectionViewCell {
     
     func configure(with number: String) {
         DispatchQueue.main.async {
-            if number == "Note" {
-                self.numLabel.removeFromSuperview()
-                self.contentView.addSubview(self.imageView)
-                NSLayoutConstraint.activate([
-                    self.imageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
-                    self.imageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
-                ])
-                self.imageView.image = UIImage(systemName: "pencil")
-            }
-            else {
-                NSLayoutConstraint.activate([
-                    self.numLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
-                    self.numLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
-                ])
-                self.numLabel.text = number
-            }
+            NSLayoutConstraint.activate([
+                self.numLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+                self.numLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
+            ])
+            self.numLabel.text = number
         }
     }
     
-    func changeNoteImage(with image: UIImage) {
+    func changeNoteImage(with imageName: String) {
         DispatchQueue.main.async {
-            self.imageView.image = image
+            self.contentView.addSubview(self.imageView)
+            NSLayoutConstraint.activate([
+                self.imageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+                self.imageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
+            ])
+            self.imageView.image = UIImage(systemName: imageName)
         }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         self.numLabel.text = nil
+        self.imageView.image = nil
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
     }
     
     required init?(coder: NSCoder) {
         fatalError()
+    }
+    override var isSelected: Bool {
+        willSet {
+            self.backgroundColor = .systemGray.withAlphaComponent(0.7)
+        }
+        didSet {
+            self.backgroundColor = .systemBackground
+        }
     }
 }
