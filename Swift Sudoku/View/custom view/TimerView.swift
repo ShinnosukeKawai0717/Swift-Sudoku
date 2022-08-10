@@ -28,7 +28,6 @@ class TimerView: UIView {
         return label
     }()
     private var shouldStop = false
-    private var timer = Timer()
     private var second: Int = 0
     private var minutes: Int = 0
     private var mistakeCount: Int = 0
@@ -52,7 +51,7 @@ class TimerView: UIView {
     }
     
     func startTimer() {
-         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
             guard let strongSelf = self else {
                 return
             }

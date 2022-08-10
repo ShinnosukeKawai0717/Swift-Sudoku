@@ -8,20 +8,25 @@
 import Foundation
 import RealmSwift
 
+class Value: Object, ObjectKeyIdentifiable {
+    @Persisted(primaryKey: true) var id: ObjectId
+    @Persisted(originProperty: "value") private var value: LinkingObjects<Column>
+    @Persisted var number: Int = 0
+    @Persisted var isHint: Bool = false
+    @Persisted var isPrefilled: Bool = false
+    @Persisted var notes: MutableSet<String>
+}
+
 
 class Column: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted(originProperty: "columns") private var colum: LinkingObjects<Row>
-    @Persisted var value: Int = 0
-    @Persisted var isHint: Bool = false
-    @Persisted var isZero: Bool = false
-    @Persisted var notes = List<String>()
+    @Persisted var value: Value?
 }
 
 class Row: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted(originProperty: "board") private var sudoku: LinkingObjects<Sudoku>
-    
     @Persisted var columns = List<Column>()
 }
 
@@ -50,11 +55,15 @@ class Sudoku: Object, ObjectKeyIdentifiable, NSCopying {
         for rows in board {
             let rowCopy = Row()
             for column in rows.columns {
+                
+                let valObj = Value()
+                valObj.number = column.value!.number
+                valObj.notes = column.value!.notes
+                valObj.isHint = column.value!.isHint
+                valObj.isPrefilled = column.value!.isPrefilled
+                
                 let columnObj = Column()
-                columnObj.value = column.value
-                columnObj.isZero = column.isZero
-                columnObj.isHint = column.isHint
-                columnObj.notes = column.notes
+                columnObj.value = valObj
                 rowCopy.columns.append(columnObj)
             }
             copy.board.append(rowCopy)

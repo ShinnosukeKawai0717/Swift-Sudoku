@@ -50,7 +50,7 @@ class NoteCell: UICollectionViewCell {
         setUpStackViews()
     }
     
-    func configure(with notes: [String]) {
+    func configureCell(with notes: Set<String>) {
         for note in notes {
             if let index = Int(note) {
                 DispatchQueue.main.async {

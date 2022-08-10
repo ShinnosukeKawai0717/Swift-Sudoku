@@ -28,7 +28,7 @@ class DatabaseManager {
     public func update(sudoku: Sudoku, newValue: Int, at indexPath: IndexPath) {
         do {
             try realm.write({
-                sudoku.board[indexPath.row].columns[indexPath.section].value = newValue
+                sudoku.board[indexPath.section].columns[indexPath.row].value!.number = newValue
             })
         } catch {
             print(error.localizedDescription)
@@ -38,9 +38,9 @@ class DatabaseManager {
     public func updateForHint(sudoku: Sudoku, newValue: Int, at indexPath: IndexPath) {
         do {
             try realm.write({
-                sudoku.board[indexPath.row].columns[indexPath.section].value = newValue
-                sudoku.board[indexPath.row].columns[indexPath.section].isHint = true
-                sudoku.board[indexPath.row].columns[indexPath.section].isZero = false
+                sudoku.board[indexPath.section].columns[indexPath.row].value!.number = newValue
+                sudoku.board[indexPath.section].columns[indexPath.row].value!.isHint = true
+                sudoku.board[indexPath.section].columns[indexPath.row].value!.isPrefilled = true
             })
         } catch {
             print(error.localizedDescription)
@@ -50,8 +50,10 @@ class DatabaseManager {
     public func updateNote(sudoku: Sudoku, newNote: String, at indexPath: IndexPath) {
         do {
             try realm.write({
-                if !sudoku.board[indexPath.row].columns[indexPath.section].notes.contains(newNote) {
-                    sudoku.board[indexPath.row].columns[indexPath.section].notes.append(newNote)
+                if sudoku.board[indexPath.section].columns[indexPath.row].value!.notes.contains(newNote) {
+                    sudoku.board[indexPath.section].columns[indexPath.row].value!.notes.remove(newNote)
+                }else {
+                    sudoku.board[indexPath.section].columns[indexPath.row].value!.notes.insert(newNote)
                 }
             })
         } catch {
@@ -64,6 +66,7 @@ class DatabaseManager {
             try realm.write({
                 for row in favorite.board {
                     for colum in row.columns {
+                        realm.delete(colum.value!)
                         realm.delete(colum)
                     }
                 }

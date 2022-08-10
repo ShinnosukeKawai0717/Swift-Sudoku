@@ -17,6 +17,6 @@ enum ToastType {
 
 struct Toast {
     let type: ToastType
-    let message: String
+    var message: String
     let image: UIImage?
 }

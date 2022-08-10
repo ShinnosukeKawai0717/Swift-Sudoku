@@ -164,11 +164,7 @@ extension MainViewController: KeyboardViewControllerDelegate {
 
 extension MainViewController: SudokuBoardViewControllerDelegate {
     func timerShouldStart() {
-        print("Timer starting....")
-        DispatchQueue.main.async {
-            self.timerView.startTimer()
-            print("Timer started")
-        }
+        self.timerView.startTimer()
     }
     func timerShouldRestart() {
         DispatchQueue.main.async {
@@ -202,14 +198,15 @@ extension MainViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return titles[row]
     }
+//    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+//
+//    }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let diff = String(row + 1)
         let title = titles[row]
         self.title = title
+        ProgressHUD.show("Generating sudoku...", interaction: false)
         self.timerView.resetTimer()
-        ProgressHUD.show()
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.sudokuVC.generateSudoku(with: diff)
-        }
+        self.sudokuVC.generateSudoku(with: diff)
     }
 }

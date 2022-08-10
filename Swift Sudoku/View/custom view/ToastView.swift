@@ -79,7 +79,7 @@ class ToastView: UIView {
             self.frame = CGRect(x: (collectionView.frame.size.width-width)/2, y: 10, width: width, height: 60)
         } completion: { done in
             if done {
-                DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                     UIView.animate(withDuration: 0.4) {
                         // move toast untill it is out of the screen
                         self.frame = CGRect(x: (collectionView.frame.size.width-width)/2, y: -60, width: width, height: 60)
