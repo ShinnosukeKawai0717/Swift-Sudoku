@@ -70,7 +70,7 @@ extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource
         self.navigationController?.popViewController(animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(50)
+        return CGFloat(80)
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true

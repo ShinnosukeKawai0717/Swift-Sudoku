@@ -55,7 +55,6 @@ class SudokuViewCell: UICollectionViewCell {
             return view
         }()
     }
-    
     required init?(coder: NSCoder) {
         fatalError()
     }

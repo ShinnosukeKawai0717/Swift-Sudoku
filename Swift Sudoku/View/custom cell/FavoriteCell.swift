@@ -13,7 +13,7 @@ class FavoriteCell: UITableViewCell {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont.systemFont(ofSize: 30, weight: .semibold)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -22,27 +22,31 @@ class FavoriteCell: UITableViewCell {
     
     private let difficultyLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let dateLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private let clockView: ClockView = ClockView()
+    
+    private let stackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.alignment = .center
+        view.distribution = .fillEqually
+        view.spacing = CGFloat(10)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(nameLabel)
-        contentView.addSubview(difficultyLabel)
-        contentView.addSubview(dateLabel)
+        stackView.addArrangedSubview(difficultyLabel)
+        stackView.addArrangedSubview(clockView)
+        contentView.addSubview(stackView)
     }
     
     public func configure(favorite: Sudoku) {
@@ -58,8 +62,9 @@ class FavoriteCell: UITableViewCell {
             default:
                 break
             }
-            self.difficultyLabel.text = favorite.diff.rawValue
+            self.difficultyLabel.text = favorite.diff.rawValue.capitalized
         }
+        clockView.configureClockLable(with: favorite.timeTaken)
     }
     
     override func layoutSubviews() {
@@ -71,9 +76,9 @@ class FavoriteCell: UITableViewCell {
         ])
         
         NSLayoutConstraint.activate([
-            difficultyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            difficultyLabel.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            difficultyLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            stackView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
+            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
     

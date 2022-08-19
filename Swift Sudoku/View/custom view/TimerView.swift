@@ -27,12 +27,12 @@ class TimerView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    private var model: Time
     private var shouldStop = false
-    private var second: Int = 0
-    private var minutes: Int = 0
     private var mistakeCount: Int = 0
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, time: Time) {
+        self.model = time
         super.init(frame: frame)
         addSubview(timerLabel)
         addSubview(mistakeLabel)
@@ -58,17 +58,23 @@ class TimerView: UIView {
             if strongSelf.shouldStop {
                  timer.invalidate()
             }
-            if strongSelf.second == 60  {
-                strongSelf.second = 0
-                strongSelf.minutes += 1
+            if strongSelf.model.second == 60  {
+                strongSelf.model.second = 0
+                strongSelf.model.minute += 1
             }
-            let second_str = strongSelf.second < 10 ? "0\(strongSelf.second)" : "\(strongSelf.second)"
-            let minu_str = strongSelf.minutes < 10 ? "0\(strongSelf.minutes)" : "\(strongSelf.minutes)"
+            if strongSelf.model.minute == 60 {
+                strongSelf.model.second = 0
+                strongSelf.model.minute = 0
+                strongSelf.model.hour += 1
+            }
+            strongSelf.timerLabel.text = strongSelf.model.timeForDisplay
             
-            strongSelf.timerLabel.text = "\(minu_str) : \(second_str)"
-            
-            strongSelf.second += 1
+            strongSelf.model.second += 1
         }
+    }
+    
+    func getCurrentTime() -> String {
+        return self.model.timeForDisplay
     }
     
     func stopTimer() {
@@ -79,8 +85,8 @@ class TimerView: UIView {
         self.startTimer()
     }
     func resetTimer() {
-        self.second = 0
-        self.minutes = 0
+        self.model.second = 0
+        self.model.minute = 0
     }
     
     override func layoutSubviews() {

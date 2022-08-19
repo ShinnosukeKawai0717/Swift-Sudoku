@@ -24,7 +24,7 @@ class MainViewController: UIViewController {
         return picker
     }()
     private let timerView: TimerView = {
-        let view = TimerView()
+        let view = TimerView(frame: .zero, time: Time())
         view.backgroundColor = .systemBackground
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -87,7 +87,7 @@ class MainViewController: UIViewController {
     
     @objc func saveDidTap() {
         let difficulty = self.title ?? "easy"
-        sudokuVC.saveFavorite(difficulty: difficulty)
+        sudokuVC.saveFavorite(difficulty: difficulty, currentTime: timerView.getCurrentTime())
         timerView.stopTimer()
     }
     

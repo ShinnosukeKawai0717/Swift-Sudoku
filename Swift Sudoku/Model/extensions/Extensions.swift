@@ -77,3 +77,14 @@ extension Array where Element: Equatable {
         return false
     }
 }
+
+extension UICollectionViewCell {
+    func setSelectedBackgroundColor(_ color: UIColor) {
+        self.selectedBackgroundView = {
+            let view = UIView()
+            view.frame = bounds
+            view.backgroundColor = color.withAlphaComponent(0.3)
+            return view
+        }()
+    }
+}

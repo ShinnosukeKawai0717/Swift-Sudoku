@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		77A45823AE9486B544B4D313 /* Pods_Swift_Sudoku.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3428ABF9BC9A0E4ADD63B02 /* Pods_Swift_Sudoku.framework */; };
-		7D342378288D7E0A0035EAD3 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D342377288D7E0A0035EAD3 /* NoteView.swift */; };
+		7D2B0CCE28ABB09B001F4D38 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B0CCD28ABB09B001F4D38 /* Time.swift */; };
 		7D451086288AFE3100A3D1EC /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D451085288AFE3100A3D1EC /* TutorialViewController.swift */; };
+		7D8C23E028ACE30200822E56 /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8C23DF28ACE30200822E56 /* ClockView.swift */; };
 		7DAB5DD1288ABB7F006FA9CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DD0288ABB7F006FA9CD /* AppDelegate.swift */; };
 		7DAB5DD3288ABB7F006FA9CD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DD2288ABB7F006FA9CD /* SceneDelegate.swift */; };
 		7DAB5DD8288ABB7F006FA9CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DAB5DD6288ABB7F006FA9CD /* Main.storyboard */; };
@@ -36,8 +37,9 @@
 
 /* Begin PBXFileReference section */
 		012002C13BD6FF7DB56286FA /* Pods-Swift Sudoku.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swift Sudoku.release.xcconfig"; path = "Target Support Files/Pods-Swift Sudoku/Pods-Swift Sudoku.release.xcconfig"; sourceTree = "<group>"; };
-		7D342377288D7E0A0035EAD3 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
+		7D2B0CCD28ABB09B001F4D38 /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
 		7D451085288AFE3100A3D1EC /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
+		7D8C23DF28ACE30200822E56 /* ClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
 		7DAB5DCD288ABB7F006FA9CD /* Swift Sudoku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swift Sudoku.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DAB5DD0288ABB7F006FA9CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7DAB5DD2288ABB7F006FA9CD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -134,7 +136,7 @@
 				7DAB5DF7288ABCFE006FA9CD /* SudokuGridView.swift */,
 				7DAB5DF8288ABCFE006FA9CD /* TimerView.swift */,
 				7DAB5DF6288ABCFE006FA9CD /* ToastView.swift */,
-				7D342377288D7E0A0035EAD3 /* NoteView.swift */,
+				7D8C23DF28ACE30200822E56 /* ClockView.swift */,
 			);
 			path = "custom view";
 			sourceTree = "<group>";
@@ -183,6 +185,7 @@
 				7DAB5DEC288ABCB8006FA9CD /* Problem.swift */,
 				7DAB5DEB288ABCB7006FA9CD /* Sudoku.swift */,
 				7DAB5DEA288ABCB7006FA9CD /* Toast.swift */,
+				7D2B0CCD28ABB09B001F4D38 /* Time.swift */,
 			);
 			path = "data models";
 			sourceTree = "<group>";
@@ -324,13 +327,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D8C23E028ACE30200822E56 /* ClockView.swift in Sources */,
 				7DAB5DFB288ABCFE006FA9CD /* TimerView.swift in Sources */,
 				7DAB5DD1288ABB7F006FA9CD /* AppDelegate.swift in Sources */,
+				7D2B0CCE28ABB09B001F4D38 /* Time.swift in Sources */,
 				7DAB5DF5288ABCE8006FA9CD /* KeyBoardCell.swift in Sources */,
 				7DAB5DEE288ABCB8006FA9CD /* Sudoku.swift in Sources */,
 				7DAB5DE8288ABC9D006FA9CD /* DatabaseManager.swift in Sources */,
 				7DAB5DD3288ABB7F006FA9CD /* SceneDelegate.swift in Sources */,
-				7D342378288D7E0A0035EAD3 /* NoteView.swift in Sources */,
 				7DAB5E01288ABD10006FA9CD /* MainViewController.swift in Sources */,
 				7DAB5DF4288ABCE8006FA9CD /* FavoriteCell.swift in Sources */,
 				7D451086288AFE3100A3D1EC /* TutorialViewController.swift in Sources */,

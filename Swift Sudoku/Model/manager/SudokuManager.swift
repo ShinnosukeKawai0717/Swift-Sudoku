@@ -57,13 +57,8 @@ class SudokuManager {
         for rows in unsolvedProblem {
             let rowObj = Row()
             for colum in rows {
-                let numObj = Value()
-                numObj.number = colum
-                numObj.isHint = false
-                numObj.isPrefilled = (colum != 0) ? true : false
-                numObj.notes = MutableSet()
-                let colObj = Column()
-                colObj.value = numObj
+                let numObj = Value(num: colum)
+                let colObj = Column(value: numObj)
                 rowObj.columns.append(colObj)
             }
             sudoku.board.append(rowObj)

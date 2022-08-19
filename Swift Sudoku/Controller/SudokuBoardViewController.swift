@@ -20,11 +20,11 @@ class SudokuBoardViewController: UIViewController {
     
     private let dispatchGroup = DispatchGroup()
     private var canEditNote = false
-    private let solvedTotast = Toast(type: .info,
+    private let solvedToast = Toast(type: .info,
                               message: "The problem has been solved",
                               image: UIImage(systemName: "checkmark.circle.fill",
                                      withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .systemGreen)))
-    private var noteTotast = Toast(type: .info, message: "Note is activated", image: nil)
+    private var noteToast = Toast(type: .info, message: "Note is activated", image: nil)
     weak var delegate: SudokuBoardViewControllerDelegate?
     private let sudokuManager = SudokuManager()
     private let databaseManager = DatabaseManager()
@@ -37,14 +37,7 @@ class SudokuBoardViewController: UIViewController {
             }
         }
     }
-    private var selectedIndex: IndexPath? {
-        willSet {
-//            guard let newValue = newValue else {
-//                return
-//            }
-//            self.sudokuGridCollectionView.reloadItems(at: [newValue])
-        }
-    }
+    private var selectedIndex: IndexPath?
     
     private let sudokuGridCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -52,7 +45,6 @@ class SudokuBoardViewController: UIViewController {
         layout.minimumInteritemSpacing = 0
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionview.translatesAutoresizingMaskIntoConstraints = false
-        collectionview.allowsMultipleSelection = false
         collectionview.allowsSelection = true
         collectionview.register(SudokuViewCell.self, forCellWithReuseIdentifier: SudokuViewCell.identifier)
         collectionview.register(NoteCell.self, forCellWithReuseIdentifier: NoteCell.identifier)
@@ -117,9 +109,13 @@ class SudokuBoardViewController: UIViewController {
                 if let solvedOne = strongSelf.sudokuManager.solve(sudoku: copy) {
                     strongSelf.solvedSudoku = solvedOne
                     DispatchQueue.main.async {
-                        let totastView = ToastView(toast: strongSelf.solvedTotast, frame: CGRect(x: 0, y: 0, width: strongSelf.view.frame.size.width/1.5, height: 60))
+                        let totastView = ToastView(toast: strongSelf.solvedToast,
+                                                   frame: CGRect(x: 0, y: 0, width: strongSelf.view.frame.size.width/1.5, height: 60))
                         totastView.show(on: strongSelf.sudokuGridCollectionView)
                     }
+                }
+                else {
+                    print("This sudoku is unsolvable.")
                 }
             case .failure(let error):
                 print(error.localizedDescription)
@@ -140,7 +136,7 @@ class SudokuBoardViewController: UIViewController {
             if let solvedBord = self.sudokuManager.solve(sudoku: unsolvedCopy) {
                 self.solvedSudoku = solvedBord
                 DispatchQueue.main.async {
-                    let totastView = ToastView(toast: self.solvedTotast, frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width/1.5, height: 60))
+                    let totastView = ToastView(toast: self.solvedToast, frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width/1.5, height: 60))
                     totastView.show(on: self.sudokuGridCollectionView)
                     ProgressHUD.dismiss()
                 }
@@ -171,13 +167,13 @@ class SudokuBoardViewController: UIViewController {
     public func activateNote() {
         canEditNote = !canEditNote
         if canEditNote {
-            noteTotast.message = "Note is activated"
+            noteToast.message = "Note is activated"
         }
         else {
-            noteTotast.message = "Note is deactivated"
+            noteToast.message = "Note is deactivated"
         }
         DispatchQueue.main.async {
-            let totastView = ToastView(toast: self.noteTotast, frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width/2, height: 60))
+            let totastView = ToastView(toast: self.noteToast, frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width/2, height: 60))
             totastView.show(on: self.sudokuGridCollectionView)
         }
     }
@@ -227,7 +223,7 @@ class SudokuBoardViewController: UIViewController {
         self.unsolvedSudoku = solvedCopy
     }
     
-    public func saveFavorite(difficulty: String) {
+    public func saveFavorite(difficulty: String, currentTime: String) {
         let uiAlert = UIAlertController(title: "New favorite", message: "Enter a name of this problem", preferredStyle: .alert)
         uiAlert.addTextField { textFeild in
             textFeild.placeholder = "Enter here..."
@@ -247,6 +243,7 @@ class SudokuBoardViewController: UIViewController {
             let result = uiAlert.textFields![0].text
             strongSelf.unsolvedSudoku.name = result ?? "My problem"
             strongSelf.unsolvedSudoku.dateAdded = Date()
+            strongSelf.unsolvedSudoku.timeTaken = currentTime
             strongSelf.databaseManager.save(newFavorite: strongSelf.unsolvedSudoku)
             strongSelf.delegate?.timerShouldRestart()
             strongSelf.databaseManager.printRealmURL()
@@ -255,7 +252,7 @@ class SudokuBoardViewController: UIViewController {
         uiAlert.addAction(done)
         uiAlert.addAction(cancel)
         
-        self.present(uiAlert, animated: true)
+        present(uiAlert, animated: true)
     }
 }
 
@@ -278,27 +275,21 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
             return noteCell
         }
         else {
-            if !val.isPrefilled {
-                if !val.notes.isEmpty {
-                    noteCell.configureCell(with: Set(val.notes))
-                    return noteCell
-                }
-            }
             if val.isHint {
                 if val.number != 0 {
-                    sudokuCell.configureLabel(with: String(val.number), textColor: .systemRed, backGroundColor: .secondarySystemBackground.withAlphaComponent(0.7))
+                    sudokuCell.configureLabel(with: String(val.number),
+                                              textColor: .systemRed,
+                                              backGroundColor: .secondarySystemBackground.withAlphaComponent(0.7))
                     return sudokuCell
                 }
                 sudokuCell.configureLabel(with: "", textColor: .systemRed, backGroundColor: .clear)
                 return sudokuCell
             }
             else {
-//                if !val.notes.isEmpty {
-//                    noteCell.configureCell(with: Set(val.notes))
-//                    return noteCell
-//                }
                 if val.number != 0 {
-                    sudokuCell.configureLabel(with: String(val.number), textColor: .systemCyan, backGroundColor: .secondarySystemBackground.withAlphaComponent(0.7))
+                    sudokuCell.configureLabel(with: String(val.number),
+                                              textColor: .systemCyan,
+                                              backGroundColor:.secondarySystemBackground.withAlphaComponent(0.7))
                     return sudokuCell
                 }
                 sudokuCell.configureLabel(with: "", textColor: .systemCyan, backGroundColor: .clear)
@@ -378,7 +369,7 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-    
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
