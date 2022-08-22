@@ -64,7 +64,7 @@ class FavoriteCell: UITableViewCell {
             }
             self.difficultyLabel.text = favorite.diff.rawValue.capitalized
         }
-        clockView.configureClockLable(with: favorite.timeTaken)
+//        clockView.configureClockLable(with: favorite.timeTaken)
     }
     
     override func layoutSubviews() {

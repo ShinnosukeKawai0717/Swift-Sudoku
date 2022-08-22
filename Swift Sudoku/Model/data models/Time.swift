@@ -6,6 +6,14 @@
 //
 
 import Foundation
+import RealmSwift
+import CoreVideo
+
+protocol TimeProtocol {
+    var hour_str: String { get }
+    var second_str: String { get }
+    var minutes_str: String { get }
+}
 
 struct Time {
     var hour: Int
@@ -41,6 +49,55 @@ struct Time {
     private var minutes_str: String {
         get {
             return minute<10 ? "0\(minute)" : "\(minute)"
+        }
+    }
+}
+
+class Clock: Object, ObjectKeyIdentifiable, TimeProtocol {
+    @Persisted(primaryKey: true) var id: ObjectId
+    @Persisted(originProperty: "clock") private var sudoku: LinkingObjects<Sudoku>
+    
+    @Persisted var timeTaken: String = "00:00"
+    var hour_str: String {
+        get {
+            return hour<10 ? "0\(hour)" : "\(hour)"
+        }
+    }
+    
+    var second_str: String {
+        get {
+            return seconds<10 ? "0\(seconds)" : "\(seconds)"
+        }
+    }
+    
+    var minutes_str: String {
+        get {
+            return minutes<10 ? "0\(minutes)" : "\(minutes)"
+        }
+    }
+    var hour: Int {
+        get {
+            if timeTaken.count > 6 {
+                if timeTaken[0] == "0" {
+                    return Int("\(timeTaken[1])")!
+                }
+                let str = "\(timeTaken[0])\(timeTaken[1])"
+                return Int(str)!
+            }
+            return 0
+        }
+    }
+    var minutes: Int {
+        get {
+            if timeTaken[3] == "0" {
+                
+            }
+            return 0
+        }
+    }
+    var seconds: Int {
+        get {
+            return 0
         }
     }
 }

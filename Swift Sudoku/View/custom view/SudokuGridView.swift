@@ -63,12 +63,12 @@ extension SudokuGridView: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.frame.size.width/9, height: self.frame.size.width/9)
+        return CGSize(width: collectionView.frame.width/9, height: collectionView.frame.width/9)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if section == 0 {
-            return UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
+            return UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
         }
         return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }

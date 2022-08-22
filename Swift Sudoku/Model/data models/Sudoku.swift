@@ -63,7 +63,7 @@ class Sudoku: Object, ObjectKeyIdentifiable, NSCopying {
     @Persisted var name: String = ""
     @Persisted var dateAdded: Date = Date()
     @Persisted private var difficulty = ""
-    @Persisted var timeTaken: String = "00:00"
+    @Persisted var clock: Clock? = Clock()
     @Persisted var board = List<Row>()
     var diff: Difficulty {
         get {

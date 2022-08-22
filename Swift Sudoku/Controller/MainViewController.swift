@@ -20,6 +20,11 @@ class MainViewController: UIViewController {
     private let titles: [String] = ["Easy", "Medium", "Hard"]
     private let diffPickerView: UIPickerView = {
         let picker = UIPickerView()
+        picker.backgroundColor = .secondarySystemBackground
+        picker.layer.masksToBounds = true
+        picker.layer.borderWidth = 1
+        picker.layer.cornerRadius = 20
+        picker.layer.borderColor = UIColor.systemGray.cgColor
         picker.translatesAutoresizingMaskIntoConstraints = false
         return picker
     }()
@@ -125,9 +130,9 @@ class MainViewController: UIViewController {
         // add constraints to diffPickerView
         NSLayoutConstraint.activate([
             diffPickerView.topAnchor.constraint(equalTo: sudokuVC.view.bottomAnchor),
-            diffPickerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 5),
-            diffPickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -5),
-            diffPickerView.heightAnchor.constraint(equalToConstant: view.frame.width/4)
+            diffPickerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
+            diffPickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
+            diffPickerView.heightAnchor.constraint(equalToConstant: view.frame.width/3.4)
         ])
         
         // add constrains to keyboardVC
@@ -193,14 +198,42 @@ extension MainViewController: UIPickerViewDataSource, UIPickerViewDelegate {
         return titles.count
     }
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return CGFloat(40)
+        return CGFloat(45)
     }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return titles[row]
     }
-//    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-//
-//    }
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        let rowHeight = pickerView.rowSize(forComponent: component).height
+        let width = self.view.frame.width - 100
+        let height = rowHeight-10
+        let myView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        let label: UILabel = {
+            let label = UILabel(frame: myView.frame)
+            label.layer.masksToBounds = true
+            label.backgroundColor = .tintColor.withAlphaComponent(0.3)
+            label.textAlignment = .center
+            label.numberOfLines = 0
+            label.layer.cornerRadius = height/2
+            label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+            return label
+        }()
+        
+        if row == 0 {
+            label.textColor = .systemGreen
+            label.text = "Easy"
+        }
+        else if row == 1 {
+            label.textColor = .systemYellow
+            label.text = "Medium"
+        }
+        else {
+            label.textColor = .systemRed
+            label.text = "Hard"
+        }
+        myView.addSubview(label)
+        return myView
+    }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let diff = String(row + 1)
         let title = titles[row]

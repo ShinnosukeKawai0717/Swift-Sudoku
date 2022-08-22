@@ -243,7 +243,7 @@ class SudokuBoardViewController: UIViewController {
             let result = uiAlert.textFields![0].text
             strongSelf.unsolvedSudoku.name = result ?? "My problem"
             strongSelf.unsolvedSudoku.dateAdded = Date()
-            strongSelf.unsolvedSudoku.timeTaken = currentTime
+            strongSelf.unsolvedSudoku.clock?.timeTaken = currentTime
             strongSelf.databaseManager.save(newFavorite: strongSelf.unsolvedSudoku)
             strongSelf.delegate?.timerShouldRestart()
             strongSelf.databaseManager.printRealmURL()
@@ -351,13 +351,13 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if section == 0 {
-            return UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
+            return UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
         }
         return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.view.frame.size.width/9, height: self.view.frame.size.width/9)
+        return CGSize(width: collectionView.frame.size.width/9, height: collectionView.frame.size.width/9)
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
