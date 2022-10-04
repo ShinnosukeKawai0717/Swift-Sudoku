@@ -22,9 +22,6 @@ class MainViewController: UIViewController {
         let picker = UIPickerView()
         picker.backgroundColor = .secondarySystemBackground
         picker.layer.masksToBounds = true
-        picker.layer.borderWidth = 1
-        picker.layer.cornerRadius = 20
-        picker.layer.borderColor = UIColor.systemGray.cgColor
         picker.translatesAutoresizingMaskIntoConstraints = false
         return picker
     }()

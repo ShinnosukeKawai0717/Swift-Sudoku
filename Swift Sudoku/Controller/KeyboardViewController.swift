@@ -34,9 +34,6 @@ class KeyboardViewController: UIViewController {
         view.backgroundColor = .secondarySystemBackground
         view.isScrollEnabled = false
         view.layer.masksToBounds = true
-        view.layer.cornerRadius = 20
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.systemGray.cgColor
         return view
     }()
 

@@ -89,6 +89,8 @@ class Clock: Object, ObjectKeyIdentifiable, TimeProtocol {
     }
     var minutes: Int {
         get {
+            // 01234567
+            // 00:00:00
             if timeTaken[3] == "0" {
                 
             }
