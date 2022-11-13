@@ -58,11 +58,4 @@ class SudokuViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    override var isHighlighted: Bool {
-        willSet {
-        }
-        didSet {
-        }
-    }
 }

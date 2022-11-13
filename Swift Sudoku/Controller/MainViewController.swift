@@ -16,7 +16,6 @@ class MainViewController: UIViewController {
     private let keyBoardVC = KeyboardViewController()
     private let favoriteListVC = FavoriteListViewController()
     private let tutorialVC = TutorialViewController()
-    private let sudokuGridView = SudokuGridView()
     private let titles: [String] = ["Easy", "Medium", "Hard"]
     private let diffPickerView: UIPickerView = {
         let picker = UIPickerView()
@@ -63,7 +62,6 @@ class MainViewController: UIViewController {
         keyBoardVC.didMove(toParent: self)
         
         view.addSubview(timerView)
-        view.addSubview(sudokuGridView)
         view.addSubview(sudokuVC.view)
         view.addSubview(keyBoardVC.view)
         view.addSubview(diffPickerView)
@@ -112,16 +110,9 @@ class MainViewController: UIViewController {
         // add constraints to sudokuVC
         NSLayoutConstraint.activate([
             sudokuVC.view.topAnchor.constraint(equalTo: timerView.bottomAnchor),
-            sudokuVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
-            sudokuVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
+            sudokuVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            sudokuVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             sudokuVC.view.heightAnchor.constraint(equalToConstant: view.frame.height/2)
-        ])
-        
-        NSLayoutConstraint.activate([
-            sudokuGridView.topAnchor.constraint(equalTo: timerView.bottomAnchor),
-            sudokuGridView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
-            sudokuGridView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
-            sudokuGridView.heightAnchor.constraint(equalToConstant: view.frame.height/2)
         ])
         
         // add constraints to diffPickerView

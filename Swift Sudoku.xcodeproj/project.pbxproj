@@ -26,7 +26,6 @@
 		7DAB5DF4288ABCE8006FA9CD /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DF1288ABCE8006FA9CD /* FavoriteCell.swift */; };
 		7DAB5DF5288ABCE8006FA9CD /* KeyBoardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DF2288ABCE8006FA9CD /* KeyBoardCell.swift */; };
 		7DAB5DF9288ABCFE006FA9CD /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DF6288ABCFE006FA9CD /* ToastView.swift */; };
-		7DAB5DFA288ABCFE006FA9CD /* SudokuGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DF7288ABCFE006FA9CD /* SudokuGridView.swift */; };
 		7DAB5DFB288ABCFE006FA9CD /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DF8288ABCFE006FA9CD /* TimerView.swift */; };
 		7DAB5E00288ABD10006FA9CD /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DFC288ABD0F006FA9CD /* FavoriteListViewController.swift */; };
 		7DAB5E01288ABD10006FA9CD /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DFD288ABD0F006FA9CD /* MainViewController.swift */; };
@@ -57,7 +56,6 @@
 		7DAB5DF1288ABCE8006FA9CD /* FavoriteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
 		7DAB5DF2288ABCE8006FA9CD /* KeyBoardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyBoardCell.swift; sourceTree = "<group>"; };
 		7DAB5DF6288ABCFE006FA9CD /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
-		7DAB5DF7288ABCFE006FA9CD /* SudokuGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SudokuGridView.swift; sourceTree = "<group>"; };
 		7DAB5DF8288ABCFE006FA9CD /* TimerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		7DAB5DFC288ABD0F006FA9CD /* FavoriteListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		7DAB5DFD288ABD0F006FA9CD /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -142,7 +140,6 @@
 		7DAB5E05288ABE64006FA9CD /* custom view */ = {
 			isa = PBXGroup;
 			children = (
-				7DAB5DF7288ABCFE006FA9CD /* SudokuGridView.swift */,
 				7DAB5DF8288ABCFE006FA9CD /* TimerView.swift */,
 				7DAB5DF6288ABCFE006FA9CD /* ToastView.swift */,
 				7D8C23DF28ACE30200822E56 /* ClockView.swift */,
@@ -356,7 +353,6 @@
 				7DAB5E00288ABD10006FA9CD /* FavoriteListViewController.swift in Sources */,
 				7DAB5DEF288ABCB8006FA9CD /* Problem.swift in Sources */,
 				7DAB5DED288ABCB8006FA9CD /* Toast.swift in Sources */,
-				7DAB5DFA288ABCFE006FA9CD /* SudokuGridView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

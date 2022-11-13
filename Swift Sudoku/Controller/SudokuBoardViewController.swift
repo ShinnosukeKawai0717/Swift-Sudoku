@@ -39,7 +39,8 @@ class SudokuBoardViewController: UIViewController {
     }
     private var selectedIndex: IndexPath?
     
-    private let sudokuGridCollectionView: UICollectionView = {
+    
+    private lazy var sudokuGridCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -50,6 +51,10 @@ class SudokuBoardViewController: UIViewController {
         collectionview.register(NoteCell.self, forCellWithReuseIdentifier: NoteCell.identifier)
         collectionview.backgroundColor = .clear
         collectionview.allowsMultipleSelection = true
+        let image = UIImage(named: "Printable Blank Sudoku Grid")
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleToFill
+        collectionview.backgroundView = imageView
         return collectionview
     }()
     
@@ -58,7 +63,7 @@ class SudokuBoardViewController: UIViewController {
         AppUtility.lockOrientation(.portrait)
         sudokuGridCollectionView.delegate = self
         sudokuGridCollectionView.dataSource = self
-        view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.translatesAutoresizingMaskIntoConstraints = false
         self.generateSudoku(with: "1")
         dispatchGroup.notify(queue: .main) { [weak self] in
             guard let strongSelf = self else {
@@ -277,9 +282,7 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         else {
             if val.isHint {
                 if val.number != 0 {
-                    sudokuCell.configureLabel(with: String(val.number),
-                                              textColor: .systemRed,
-                                              backGroundColor: .secondarySystemBackground.withAlphaComponent(0.7))
+                    sudokuCell.configureLabel(with: String(val.number), textColor: .systemRed, backGroundColor: .clear)
                     return sudokuCell
                 }
                 sudokuCell.configureLabel(with: "", textColor: .systemRed, backGroundColor: .clear)
@@ -287,9 +290,7 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
             }
             else {
                 if val.number != 0 {
-                    sudokuCell.configureLabel(with: String(val.number),
-                                              textColor: .systemCyan,
-                                              backGroundColor:.secondarySystemBackground.withAlphaComponent(0.7))
+                    sudokuCell.configureLabel(with: String(val.number), textColor: .systemCyan, backGroundColor:.clear)
                     return sudokuCell
                 }
                 sudokuCell.configureLabel(with: "", textColor: .systemCyan, backGroundColor: .clear)
@@ -322,7 +323,15 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
         }
         self.selectedIndex = indexPath
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
 
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.view.frame.width/9, height: self.view.frame.height/9)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         DispatchQueue.main.async {
             guard let selectedIndexs = collectionView.indexPathsForSelectedItems else {
@@ -347,17 +356,6 @@ extension SudokuBoardViewController: UICollectionViewDelegate, UICollectionViewD
             }
         }
         self.selectedIndex = indexPath
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        if section == 0 {
-            return UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
-        }
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.size.width/9, height: collectionView.frame.size.width/9)
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
