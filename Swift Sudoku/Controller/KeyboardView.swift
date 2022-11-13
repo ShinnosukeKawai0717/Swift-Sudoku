@@ -8,10 +8,10 @@
 import UIKit
 
 protocol KeyboardViewControllerDelegate: AnyObject {
-    func keyboardViewController(_ vc: KeyboardViewController, didTapKey letter: String)
+    func keyboardViewController(_ vc: KeyboardView, didTapKey letter: String)
 }
 
-class KeyboardViewController: UIViewController {
+class KeyboardView: UIView {
     
     weak var delegate: KeyboardViewControllerDelegate?
     
@@ -36,28 +36,36 @@ class KeyboardViewController: UIViewController {
         view.layer.masksToBounds = true
         return view
     }()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        AppUtility.lockOrientation(.portrait)
-        view.translatesAutoresizingMaskIntoConstraints = false
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        translatesAutoresizingMaskIntoConstraints = false
         keyboardCollectionView.delegate = self
         keyboardCollectionView.dataSource = self
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        view.addSubview(keyboardCollectionView)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//
+//    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        addSubview(keyboardCollectionView)
         NSLayoutConstraint.activate([
-            keyboardCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            keyboardCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            keyboardCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            keyboardCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            keyboardCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            keyboardCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            keyboardCollectionView.topAnchor.constraint(equalTo: topAnchor),
+            keyboardCollectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }
 
-extension KeyboardViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
+extension KeyboardView: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return keys[section].count
     }

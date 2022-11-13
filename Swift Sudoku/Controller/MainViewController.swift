@@ -13,7 +13,7 @@ class MainViewController: UIViewController {
     
     private var isNoteActive = false
     private let sudokuVC = SudokuBoardViewController()
-    private let keyBoardVC = KeyboardViewController()
+    private let keyBoardVC = KeyboardView()
     private let favoriteListVC = FavoriteListViewController()
     private let tutorialVC = TutorialViewController()
     private let titles: [String] = ["Easy", "Medium", "Hard"]
@@ -38,7 +38,6 @@ class MainViewController: UIViewController {
         diffPickerView.delegate = self
         diffPickerView.dataSource = self
         favoriteListVC.delegate = self
-        AppUtility.lockOrientation(.portrait)
         view.backgroundColor = .systemBackground
     }
     
@@ -49,7 +48,6 @@ class MainViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        AppUtility.lockOrientation(.all)
     }
     
     private func initMainView() {
@@ -58,12 +56,12 @@ class MainViewController: UIViewController {
         addChild(sudokuVC)
         sudokuVC.didMove(toParent: self)
         
-        addChild(keyBoardVC)
-        keyBoardVC.didMove(toParent: self)
-        
+//        addChild(keyBoardVC)
+//        keyBoardVC.didMove(toParent: self)
+//
         view.addSubview(timerView)
         view.addSubview(sudokuVC.view)
-        view.addSubview(keyBoardVC.view)
+        view.addSubview(keyBoardVC)
         view.addSubview(diffPickerView)
         addConstraints()
         initNavigationItems()
@@ -105,36 +103,27 @@ class MainViewController: UIViewController {
             timerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
             timerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
             timerView.heightAnchor.constraint(equalToConstant: 30),
-        ])
-        
-        // add constraints to sudokuVC
-        NSLayoutConstraint.activate([
+            
             sudokuVC.view.topAnchor.constraint(equalTo: timerView.bottomAnchor),
             sudokuVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             sudokuVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            sudokuVC.view.heightAnchor.constraint(equalToConstant: view.frame.height/2)
-        ])
-        
-        // add constraints to diffPickerView
-        NSLayoutConstraint.activate([
+            sudokuVC.view.heightAnchor.constraint(equalToConstant: view.frame.height/2),
+            
             diffPickerView.topAnchor.constraint(equalTo: sudokuVC.view.bottomAnchor),
             diffPickerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
             diffPickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
-            diffPickerView.heightAnchor.constraint(equalToConstant: view.frame.width/3.4)
-        ])
-        
-        // add constrains to keyboardVC
-        NSLayoutConstraint.activate([
-            keyBoardVC.view.topAnchor.constraint(equalTo: diffPickerView.bottomAnchor),
-            keyBoardVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
-            keyBoardVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
-            keyBoardVC.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            diffPickerView.heightAnchor.constraint(equalToConstant: view.frame.width/3.4),
+            
+            keyBoardVC.topAnchor.constraint(equalTo: diffPickerView.bottomAnchor),
+            keyBoardVC.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
+            keyBoardVC.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
+            keyBoardVC.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }
 
 extension MainViewController: KeyboardViewControllerDelegate {
-    func keyboardViewController(_ vc: KeyboardViewController, didTapKey letter: String) {
+    func keyboardViewController(_ vc: KeyboardView, didTapKey letter: String) {
         if letter == "Note" {
             isNoteActive = !isNoteActive
             sudokuVC.activateNote()

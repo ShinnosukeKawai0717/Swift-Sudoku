@@ -29,7 +29,7 @@
 		7DAB5DFB288ABCFE006FA9CD /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DF8288ABCFE006FA9CD /* TimerView.swift */; };
 		7DAB5E00288ABD10006FA9CD /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DFC288ABD0F006FA9CD /* FavoriteListViewController.swift */; };
 		7DAB5E01288ABD10006FA9CD /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DFD288ABD0F006FA9CD /* MainViewController.swift */; };
-		7DAB5E02288ABD10006FA9CD /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DFE288ABD0F006FA9CD /* KeyboardViewController.swift */; };
+		7DAB5E02288ABD10006FA9CD /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DFE288ABD0F006FA9CD /* KeyboardView.swift */; };
 		7DAB5E03288ABD10006FA9CD /* SudokuBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB5DFF288ABD10006FA9CD /* SudokuBoardViewController.swift */; };
 		7DBAA5F42890224F00E1AF35 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBAA5F32890224F00E1AF35 /* NoteCell.swift */; };
 /* End PBXBuildFile section */
@@ -59,7 +59,7 @@
 		7DAB5DF8288ABCFE006FA9CD /* TimerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		7DAB5DFC288ABD0F006FA9CD /* FavoriteListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		7DAB5DFD288ABD0F006FA9CD /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		7DAB5DFE288ABD0F006FA9CD /* KeyboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+		7DAB5DFE288ABD0F006FA9CD /* KeyboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		7DAB5DFF288ABD10006FA9CD /* SudokuBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SudokuBoardViewController.swift; sourceTree = "<group>"; };
 		7DBAA5F32890224F00E1AF35 /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		E3428ABF9BC9A0E4ADD63B02 /* Pods_Swift_Sudoku.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swift_Sudoku.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -129,7 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				7DAB5DFC288ABD0F006FA9CD /* FavoriteListViewController.swift */,
-				7DAB5DFE288ABD0F006FA9CD /* KeyboardViewController.swift */,
+				7DAB5DFE288ABD0F006FA9CD /* KeyboardView.swift */,
 				7DAB5DFD288ABD0F006FA9CD /* MainViewController.swift */,
 				7DAB5DFF288ABD10006FA9CD /* SudokuBoardViewController.swift */,
 				7D451085288AFE3100A3D1EC /* TutorialViewController.swift */,
@@ -349,7 +349,7 @@
 				7DAB5DE9288ABC9D006FA9CD /* SudokuManager.swift in Sources */,
 				7DAB5DE5288ABC86006FA9CD /* Extensions.swift in Sources */,
 				7DAB5DF3288ABCE8006FA9CD /* SudokuViewCell.swift in Sources */,
-				7DAB5E02288ABD10006FA9CD /* KeyboardViewController.swift in Sources */,
+				7DAB5E02288ABD10006FA9CD /* KeyboardView.swift in Sources */,
 				7DAB5E00288ABD10006FA9CD /* FavoriteListViewController.swift in Sources */,
 				7DAB5DEF288ABCB8006FA9CD /* Problem.swift in Sources */,
 				7DAB5DED288ABCB8006FA9CD /* Toast.swift in Sources */,
@@ -506,9 +506,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -536,9 +535,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

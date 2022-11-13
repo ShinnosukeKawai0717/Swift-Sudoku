@@ -39,8 +39,7 @@ class SudokuBoardViewController: UIViewController {
     }
     private var selectedIndex: IndexPath?
     
-    
-    private lazy var sudokuGridCollectionView: UICollectionView = {
+    private let sudokuGridCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -60,7 +59,6 @@ class SudokuBoardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        AppUtility.lockOrientation(.portrait)
         sudokuGridCollectionView.delegate = self
         sudokuGridCollectionView.dataSource = self
         self.view.translatesAutoresizingMaskIntoConstraints = false
